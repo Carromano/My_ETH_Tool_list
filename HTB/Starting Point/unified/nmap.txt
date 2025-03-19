@@ -1,0 +1,85 @@
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-03-11 22:43 CET
+NSE: Loaded 157 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 22:43
+Completed NSE at 22:43, 0.00s elapsed
+Initiating NSE at 22:43
+Completed NSE at 22:43, 0.00s elapsed
+Initiating NSE at 22:43
+Completed NSE at 22:43, 0.00s elapsed
+Initiating Ping Scan at 22:43
+Scanning 10.129.96.149 [4 ports]
+Completed Ping Scan at 22:43, 0.07s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 22:43
+Completed Parallel DNS resolution of 1 host. at 22:43, 0.02s elapsed
+Initiating SYN Stealth Scan at 22:43
+Scanning 10.129.96.149 [1000 ports]
+Discovered open port 22/tcp on 10.129.96.149
+Discovered open port 8080/tcp on 10.129.96.149
+Discovered open port 6789/tcp on 10.129.96.149
+Discovered open port 8443/tcp on 10.129.96.149
+Completed SYN Stealth Scan at 22:43, 1.01s elapsed (1000 total ports)
+Initiating Service scan at 22:43
+Scanning 4 services on 10.129.96.149
+Stats: 0:01:27 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 75.00% done; ETC: 22:44 (0:00:28 remaining)
+Stats: 0:01:32 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 75.00% done; ETC: 22:45 (0:00:30 remaining)
+Completed Service scan at 22:45, 158.87s elapsed (4 services on 1 host)
+NSE: Script scanning 10.129.96.149.
+Initiating NSE at 22:45
+Stats: 0:02:45 elapsed; 0 hosts completed (1 up), 1 undergoing Script Scan
+NSE: Active NSE Script Threads: 2 (2 waiting)
+NSE Timing: About 99.65% done; ETC: 22:45 (0:00:00 remaining)
+Completed NSE at 22:45, 14.31s elapsed
+Initiating NSE at 22:45
+Completed NSE at 22:46, 1.24s elapsed
+Initiating NSE at 22:46
+Completed NSE at 22:46, 0.01s elapsed
+
+
+
+Nmap scan report for 10.129.96.149
+Host is up (0.12s latency).
+Not shown: 996 closed tcp ports (reset)
+
+PORT     STATE SERVICE         VERSION
+22/tcp   open  ssh             OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 48:ad:d5:b8:3a:9f:bc:be:f7:e8:20:1e:f6:bf:de:ae (RSA)
+|   256 b7:89:6c:0b:20:ed:49:b2:c1:86:7c:29:92:74:1c:1f (ECDSA)
+|_  256 18:cd:9d:08:a6:21:a8:b8:b6:f7:9f:8d:40:51:54:fb (ED25519)
+6789/tcp open  ibm-db2-admin?
+8080/tcp open  http            Apache Tomcat (language: en)
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Did not follow redirect to https://10.129.96.149:8443/manage
+|_http-open-proxy: Proxy might be redirecting requests
+8443/tcp open  ssl/nagios-nsca Nagios NSCA
+| http-title: UniFi Network
+|_Requested resource was /manage/account/login?redirect=%2Fmanage
+| ssl-cert: Subject: commonName=UniFi/organizationName=Ubiquiti Inc./stateOrProvinceName=New York/countryName=US
+| Subject Alternative Name: DNS:UniFi
+| Issuer: commonName=UniFi/organizationName=Ubiquiti Inc./stateOrProvinceName=New York/countryName=US
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2021-12-30T21:37:24
+| Not valid after:  2024-04-03T21:37:24
+| MD5:   e6be:8c03:5e12:6827:d1fe:612d:dc76:a919
+|_SHA-1: 111b:aa11:9cca:4401:7cec:6e03:dc45:5cfe:65f6:d829
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+NSE: Script Post-scanning.
+Initiating NSE at 22:46
+Completed NSE at 22:46, 0.00s elapsed
+Initiating NSE at 22:46
+Completed NSE at 22:46, 0.00s elapsed
+Initiating NSE at 22:46
+Completed NSE at 22:46, 0.00s elapsed
+Read data files from: /usr/share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 177.06 seconds
+           Raw packets sent: 1004 (44.152KB) | Rcvd: 1001 (40.044KB)

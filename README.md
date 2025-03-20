@@ -153,6 +153,18 @@ tool da terminale linux che serve per enumerare le porte di un server HTTP.
 > alcuni tag utili:
 >> --wordlist: serve per specificare la wordlist da usare per ricercare le directory
 
+## git-dumper
+tool per scaricare un eventuale repository esposta online
+
+fare il check https://url/.git/ . se accessibile, allora usare il tool per scaricare tutto
+
+- https://github.com/arthaud/git-dumper
+
+> pip install git-dumper
+
+> git-dumper http://ip/.git/ ./cartella_a_scelta
+
+
 ## NetBios Command Line Tool - Windows
 Tool per effettuare enumerazione di rete.
 

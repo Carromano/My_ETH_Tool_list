@@ -585,3 +585,43 @@ Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere p
   - WinPeas
 - Linux:
   - LinPeas
+
+
+# Network Attacks
+
+## Sniffing Tools
+
+### macof - Mac Flooding Tools
+macof is a Unix/Linux Tool that floods the switch's CAM tables by sending fake MAC entries.
+
+> macof -i etho0 -n 10
+
+### arpspoof - ARP Poisoning Tool
+
+> https://linux.die.net 
+
+redirects packets from a target host (or all hosts) on the LAN intended for another host on the LAN by forging ARP replies
+
+> arpspoof -i [INterface] -t [Target Host]
+
+### Other ARP Poisoning TOOLS
+
+- BetterCAP: www.bettercap.org
+- Ettercap: www.ettercap-project.org
+- dsniff: www.monkey.org
+- MITMf: su github
+- Arpoison: sourceforge.net
+
+### Wireshark
+
+> https://www.wireshark.org
+
+helps analyzing captured packets (.pcap)
+
+### Other Sniffing Tools:
+
+- SteelCentral Packet Analyzer: https://www.riverbed.com  
+- Capsa Network Analyzer: https://www.colasoft.com  
+- Observer Analyzer: https://www.viavisolutions.com  
+- PRTG Network Monitor: https://www.paessler.com  
+- SolarWinds Deep Packet Inspection and Analysis: https://www.solarwinds.com  

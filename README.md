@@ -143,6 +143,11 @@ tips and tricks:
 
 # ENUMERATION  
 
+
+## robots.txt file
+https://indirizzo/robots.txt
+
+
 ## NMAP
 Come può essere usato per lo scan, è molto utile per l'enumeration delle porte aperte e di numerose altre informazioni su connettività e rete.
 

@@ -17,6 +17,7 @@
 > NTP - 123 in UDP   
 > NetBIOS - 137, 138 in udp, oppure 139 in tcp  
 > IMAP4 - 143 tcp, 993 tcp (SSL)  
+> SNMP - 161, 162 udp  
 > LDAP - 389 tcp, 636 tcp (SSL)  
 > HTTPS - 443    
 > SMB - 445 udp  
@@ -154,6 +155,7 @@ tips and tricks:
 - IMAP: passwords and data are sent in clear text 
 - SMTP and NNTP: passwords and data are sent in clear text   
 - FTP: passwords and data are sent in clear text   
+- SNMP: the first version (SNMPv1) uses clear text to transfer data
 
 
 <br>

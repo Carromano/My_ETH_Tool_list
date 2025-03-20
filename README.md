@@ -6,14 +6,27 @@
 
 # Porte Comuni:
 
-> HTTP - 80  
-> LDAP - 389
+> FTP - 20/21 in tcp
+> ssh - 22 in tcp
+> Telnet - 23 in tcp
+> DNS - solitamente la 53 tcp/udp
+> HTTP - 80, 8080 in tcp
+> kerberos - 88 in tcp
+> POP - 110 in tcp
+> POP3 - 995 tcp
+> NTP - 123 in UDP
+> NetBIOS - 137, 138 in udp, oppure 139 in tcp
+> LDAP - 389 tcp, 636 tcp (SSL)
 > HTTPS - 443  
-> SMB - 445  
+> SMB - 445 udp
+> Active directory - 445 tcp
+> SMTP - 465 tcp (SSL), 587 tcp 
+> OpenVPN - 1194 tcp/udp
 > Microsoft SQL Server - 1443  
 > Microsoft SQL Monitor - 1434  
 > MySQL o Maria DB - 3306  
 > Microsoft RDP - 3389  
+> PostgreSQL - 5631 tcp
 > Traceroute - 33434  
 
 # WEB FOOTPRINTING
@@ -133,6 +146,13 @@ tips and tricks:
 ### responder
 > sudo responder -I eth0
 
+## Protocolli vulnerabili a Sniffing
+- telnet e Rlogin: keystrokes like usernames and passwords are sent in clear  
+- HTTP: data is sent in clear text  
+- POP: passwords and data are sent in clear text  
+- IMAP: passwords and data are sent in clear text 
+- SMTP and NNTP: passwords and data are sent in clear text   
+- FTP: passwords and data are sent in clear text   
 
 
 <br>

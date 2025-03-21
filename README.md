@@ -3,6 +3,11 @@
 - https://github.com/spaze/hashes
 - https://book.hacktricks.wiki/en/index.html
 
+<br>
+
+---
+
+<br>
 
 # Porte Comuni:
 
@@ -30,6 +35,13 @@
 > Microsoft RDP - 3389    
 > PostgreSQL - 5631 tcp  
 > Traceroute - 33434    
+
+<br>
+
+---
+
+<br>
+
 
 # WEB FOOTPRINTING
 ## Google Advanced Search
@@ -59,7 +71,9 @@ Estrae dettagli utili sull'url specificato nel campo di ricerca della pagina, co
   
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -160,7 +174,9 @@ tips and tricks:
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -279,7 +295,9 @@ permette di vedere tutte le connessioni attualmente attive su windows
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -374,7 +392,9 @@ per usare la shell da python
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -467,7 +487,9 @@ Cracks hashes with rainbow tables attacks, using time-memory trade-off algorithm
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -550,7 +572,9 @@ used to audit organization's security for phishing attacks using various phishin
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
@@ -625,3 +649,58 @@ helps analyzing captured packets (.pcap)
 - Observer Analyzer: https://www.viavisolutions.com  
 - PRTG Network Monitor: https://www.paessler.com  
 - SolarWinds Deep Packet Inspection and Analysis: https://www.solarwinds.com  
+
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# DoS/DDoS Tools
+
+## hping3
+
+> http://www.hping.org
+
+command-line-oriented network scanning and packet crafting tool for the TCP/IP protocol that sends ICMP echo requests and supports TCP,UDP,ICMP and raw-ip protocols.
+
+esempi di utilizzo:
+
+> hping3 -S 10.10.10.10 -a 10.10.10.19 .p 22 --flood
+
+> hping -d 65538 -S -p 21 --flood 10.10.10.10
+
+## High Orbit Ion Cannon (HOIC)
+
+> https://sourceforge.net
+
+HOIC is a network stress and DoS/DDoS attack application written in BASIC language. It sends HTTP POST and GET requests to a computer that uses lulz-inspired GUIs. 
+
+some of its features are:
+- HTTP floading
+- simoultaneously flooding up to 256 websites
+- select the number of threads in an ongoing attack
+- ability to throttle attacks individually with three settings
+- portability with Linux
+
+## Low Orbit Ion Cannon (LOIC)
+
+> https://sourceforge.net
+
+LOIC is a network stress testing and DoS attack application. LOIC attacks can be called application-based DOS attacks because they primarily focus web applications.
+
+LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets to disrupt the service
+
+## Other DoS/DDoS Tools:
+
+- XOIC: http://anonhacktivism.blogspot.com
+- HULK: https://siberianlaika.ru
+- Tor's Hammer: https://souceforge.net
+- Slowloris: su github
+- PyLoris: https://souceforge.net
+- R-U-Dead-Yet: https://souceforge.net
+
+

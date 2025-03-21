@@ -703,4 +703,13 @@ LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets
 - PyLoris: https://souceforge.net
 - R-U-Dead-Yet: https://souceforge.net
 
+## DoS/DDoS PROTECTION TOOLS
+
+- Anti DDoS Guardian: http://beethink.com
+- Imperva DDoS Protection: https://www.imperva.com
+- DOSarrest's DDOS protection service: https://www.dosarrest.com
+- DDoS-GUARD: https://ddos-guard.net
+- Cloudflare: https://www.cloudflare.com
+- F5: https://f5.com
+
 

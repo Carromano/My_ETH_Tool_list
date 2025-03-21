@@ -721,7 +721,9 @@ LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets
 <br>
 <br>
 
-# Session Hijacking Tools
+# SESSION HIJACKING
+
+## Session Hijacking Tools
 
 - OWASP ZAP: https://owasp.org
 - Burp Suite: https://portswigger.net
@@ -729,3 +731,15 @@ LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets
 - netool toolkit: on sourceforge
 - WebSploit Framework: on sourceforge
 - sslstrip: https://pypi.org
+
+## Session Hijacking Detection Tools
+
+- Wireshark: https://www.wireshark.org
+- USM Anywhere: https://cybersecurity.att.com
+- Check Point IPS: https://www.checkpoint.com
+- LogRhythm: https://logrhythm.com
+- SolarWinds Security Event Manager (SEM): https://www.solarwinds.com
+- IBM Security Network Intrusion Prevention System: https://www.ibm.com 
+
+
+

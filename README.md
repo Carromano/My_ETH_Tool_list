@@ -713,3 +713,19 @@ LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets
 - F5: https://f5.com
 
 
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# Session Hijacking Tools
+
+- OWASP ZAP: https://owasp.org
+- Burp Suite: https://portswigger.net
+- bettercap: https://bettercap.org
+- netool toolkit: on sourceforge
+- WebSploit Framework: on sourceforge
+- sslstrip: https://pypi.org

@@ -293,6 +293,13 @@ permette di vedere tutte le connessioni attualmente attive su windows
 
 > netstat -aon
 
+
+## crackmapexec
+tool in python utile per fare pentesting a livello di rete per Active Directory. Funziona bene con SMB
+
+Esempio di utilizzo:
+> crackmapexec smb [IP] -u "user" -p "pass" --rid-brute
+
 <br>
 <br>
 
@@ -314,7 +321,22 @@ Comandi:
 > smbclient: per utilizzare il client  
 >
 > alcuni tag:
+>> -N: utenze senza password
 >> -L _ip_: per listare le shared directory aperte su un ip.
+
+List delle utenze senza password:
+> smbclient -N -L  [IP TARGET]
+
+### SMBMAP
+Tool utile per enumerare directories su smb
+
+Comando da terminale:
+> smbmap 
+
+Alcuni tag utili:
+> -H [IP HOST REMOTO]
+> -u 'Username'
+> -p 'password'
 
 ## netcat (nc)
 semplice utilità unix per leggere e scrivere dati attraverso connessioni sulla rete, usando TCP e UDP

@@ -466,11 +466,13 @@ tool che permette di hashare le password con qualsiasi algoritmo. Utile per capi
 solitamente i primi caratteri sono indicativi dell'hash utilizzato
 
 
-## Cain
+## Cain & Abel
 password recovery tool for windows. Can also be used for sniffing and password cracking.
 Permette di trovare le password nei file delle password del sistema, nel tab "CRACKER"
 
 > https://github.com/xchwarze/Cain
+
+
 
 ## Default Password lists
 - https://open-sez.me 
@@ -642,13 +644,23 @@ macof is a Unix/Linux Tool that floods the switch's CAM tables by sending fake M
 
 > macof -i etho0 -n 10
 
+> -s src: source address
+> -d dst: destination
+> -x sport: source port
+> -y dport: destination port
+> -i interface
+> -n times: number of packets to send
+
 ### arpspoof - ARP Poisoning Tool
 
 > https://linux.die.net 
 
 redirects packets from a target host (or all hosts) on the LAN intended for another host on the LAN by forging ARP replies
 
-> arpspoof -i [INterface] -t [Target Host]
+> arpspoof -i [INterface] -t [Target Host] [victim host]
+
+Esempio:
+> arpspoof -i eth0 -t 10.10.1.1 10.10.1.10 // con 10.10.1.1 che è il default gateway e 10.10.1.10.l'host
 
 ### Other ARP Poisoning TOOLS
 
@@ -683,6 +695,19 @@ helps analyzing captured packets (.pcap)
 
 # DoS/DDoS Tools
 
+## UDP based applications that can be used to attack with UDP flood  
+> CharGEN (Port 19)  
+> SNMPv2 (Port 161)  
+> QOTD (Port 17)  
+> RPC (Port 135)  
+> SSDP (Port 1900)  
+> CLDAP (Port 389)  
+> TFTP (Port 69)  
+> NetBIOS (Port 137, 138, 139)  
+> NTP (Port 123)  
+> Quake Network Protocol (Port 26000)  
+> VoIP (Port 5060)  
+
 ## hping3
 
 > http://www.hping.org
@@ -691,9 +716,23 @@ command-line-oriented network scanning and packet crafting tool for the TCP/IP p
 
 esempi di utilizzo:
 
-> hping3 -S 10.10.10.10 -a 10.10.10.19 .p 22 --flood
+SYN flooding attack
+> hping3 -S 10.10.10.10 -a 10.10.10.19 -p 22 --flood
 
-> hping -d 65538 -S -p 21 --flood 10.10.10.10
+Ping of Death Attacks
+> hping3 -d 65538 -S -p 21 --flood 10.10.10.10
+
+UDP Flooding attack (se aperta porta 139 in udp) 
+> hping3 -2 -p 139 --flood [target ip]
+
+Alcune opzioni
+> -S: sets the syn flag 
+> -a [Spoofable IP Address]: spooofs the IP address to a selected one
+> -p xx: specifies the destination port
+> --flood: sends a huge number of packets
+> -d nn: dimensioni pacchetto arbitrarie
+> -2: UDP MODe
+
 
 ## High Orbit Ion Cannon (HOIC)
 
@@ -749,10 +788,26 @@ LOIC can be used on target sites to flood the server with TCP, UDP, HTTP packets
 
 - OWASP ZAP: https://owasp.org
 - Burp Suite: https://portswigger.net
-- bettercap: https://bettercap.org
 - netool toolkit: on sourceforge
 - WebSploit Framework: on sourceforge
 - sslstrip: https://pypi.org
+
+## bettercap
+linux command-line tool for session hijacking. Sends several ARP broadcast requests to the hosts (or potential active hosts.)
+
+> https://bettercap.org
+
+execution example from linux terminal:
+
+> bettercap - iface eth0
+>
+> una volta entrati nel tool:
+> 
+>>  net.probe on
+>>  net.recon on   // displays the detected ip addresses in the network in real time and starts sniffing packets.
+>> 
+
+Per riconoscere l'attacco con Wireshark, basta tenere d'occhio se compare un elevato numero di richieste ARP in broadcast, sintomo che bettercap ad esempio è attivo
 
 ## Session Hijacking Detection Tools
 

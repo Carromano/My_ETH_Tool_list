@@ -3,10 +3,21 @@
 - https://github.com/spaze/hashes
 - https://book.hacktricks.wiki/en/index.html
 
+# Comandi da terminale
+
+## Linux
+...
+
+## Windows
+
+- TASKLIST: fa vedere tutti i task attivi (tipo task manager)
+
+<br>
 <br>
 
 ---
 
+<br>
 <br>
 
 # Porte Comuni:
@@ -237,6 +248,11 @@ alcune opzioni utili sono:
 > --os-shell: prova ad ottenere l'accesso ad una shell remota, exploitando anche la vulnerabilità
 > --cookie="COOKIE=VALORE": per impostare cookie come PHPSESSION
 > --auth-type="...": con valori predefiniti, serve per impostare il tipo di auth da http header
+> --dbs: enumerates DBMS Databases
+> -D [database]: scegli un database da testare
+> --tables: enumerates DBMS database tables
+> -T [tabella]: scegli una tabella da enumerare
+> --dump: dump all content of a table
 
 ## Metasploit
 Initialize the DB:
@@ -914,6 +930,20 @@ OWASP Zed Attack Proxy (ZAP) is an integrated penetration testing tool for findi
 > http://sqlmap.org 
 
 Open-Source Penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and the taking over of a database.
+
+### Damn Small SQLi Scanner (DSSS)
+
+tool ottenibile su github. è un eseguibile python. Il readme è molto esplicativo.
+
+Esempio di uso:
+> python3 dsss.py -u "http://sitotarget" --cookie="[cookie_del_sito]"
+>
+> questa esecuzione semplice avvisa solamente se esiste una possibilità di sql injection. INoltre manda un link per i risultati di una SQL injection che espone il database.
+
+Tags:
+> -u "[url]": specifies the target url
+> --cookie="[COOKIE]": enters the cookie value to login
+
 
 ### Others SQL Injection Tools
 

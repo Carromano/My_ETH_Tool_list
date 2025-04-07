@@ -1126,9 +1126,30 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 
 # IoT and OT Hacking Tools
 
+## Shodan
+> https://www.shodan.io
+
+you can gather additional information on a target device using the following Shodan filters:
+
++ Search for Modbus-enabled ICS/SCADA systems:
+  + port:502
+
++ search for MQTT port enabled sites:
+  + port:1883
+
++ Search for SCADA systems using PLC name:
+  + "Schneider Electric"
+
++ Search for SCADA systems using geolocation:
+  + SCADA Country:"US"
+
+## MQTT Exèòprer
+Client MQTT che permette di analizzare il protocollo MQTT sui propri dispositivi.
+
+il protocollo MQTT è uno dei protocolli livello IP per IoT Devices.
+
 ## IoT Attack Tools
 - Wireshark: https://www.wireshark.org
-- Shodan: https://www.shodan.io
 - Firmalyzer: https://firmalyzer.com
 - RIoT Vulnerability Scanner: https://www.beyondtrust.com
 - Foren6: https://cetic.github.io
@@ -1169,6 +1190,56 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 <br>
 <br>
 
+# Cloud Computing Tools
+
+## lazy3: S3 Bucket Enumeration
+> il tool è pubblico su github
+
+> ruby lazys3.rb [Nome_company]
+
+il tool listerà bucket pubblici riguardanti la company inserita (o tutti quelli che trova)
+
+
+## Container Management Platforms
+- Docker: https://www.docker.com
+- Amazon Elastic Container Service (ECS): https://aws.amazon.com
+- Microsoft Azure Container Instances (ACI): https://azure.microsoft.com 
+- Red Hat OpenShift Container Platform: https://www.openshift.com
+- Portainer: https://www.portainer.io
+- HPE Ezmeral Container Platform: https://www.hpe.com
+
+## Kubernetes platforms
+- Kubernetes: https://kubernetes.io 
+- Amazon Elastic Kubernetes Service (EKS): https://aws.amazon.com 
+- Docker Kubernetes Service (DKS): https://www.docker.com 
+- Knative: https://cloud.google.com 
+- IBM Cloud Kubernetes Service: https://www.ibm.com 
+- Google Kubernetes Engine (GKE): https://cloud.google.com
+
+## Cloud Attack Tools
+- Nimbostratus: https://andresriancho.github.io
+- S3Scanner: https://github.com 
+- Cloud Container Attack Tool (CCAT): https://github.com 
+- Pacu: https://github.com 
+- DumpsterDiver: https://github.com 
+- GCPBucketBrute: https://rhinosecuritylabs.com
+ 
+## Cloud Security Tools
+- Qualys Cloud Platform: https://www.qualys.com
+- CloudPassage Halo: https://www.cloudpassage.com 
+- McAfee MVISION Cloud: https://www.mcafee.com 
+- CipherCloud: https://www.ciphercloud.com 
+- Netskope Security Cloud: https://www.netskope.com 
+- Prisma Cloud: https://www.paloaltonetworks.com
+
+
+<br>
+<br>
+
+-----
+
+<br>
+<br>
 
 # REVERSE SHELL
 

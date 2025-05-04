@@ -1,3 +1,34 @@
+# INDICE
+
+1. [SITI](#siti-utili---payload-ed-exploits)
+2. [Comandi](#comandi-da-terminale)
+3. [Porte](#porte-comuni)
+4. [Web FootPrinting](#web-footprinting)
+5. [Network Foot PRinting and Scanning](#network-footprinting-and-scanning)
+6. [Enumeration](#enumeration)
+7. [Exploitation](#exploitation)
+8. [password cracking](#password-cracking)
+9. [Malwares](#malwares)
+10. [social engineering](#social-engineering)
+11. [hiding tracks](#hiding-tracks)
+12. [privesc](#priviledge-excalation)
+13. [network attacks](#network-attacks)
+14. [Ddos](#dosddos-tools)
+15. [session hijacking](#session-hijacking)
+16. [web server and apps](#web-server-and-application)
+17. [wireless](#wireless-networks)
+18. [bluetooth](#bluetooth-attacks)
+19. [mobile](#mobile-hacking)
+20. [IoT](#iot-and-ot-hacking-tools)
+21. [Cloud](#cloud-computing-tools)
+22. [Reverse shell](#reverse-shell)
+
+<br>
+<br>
+<br>
+<br>
+
+
 # SITI UTILI - payload ed exploits
 - https://github.com/swisskyrepo/PayloadsAllTheThings
 - https://github.com/spaze/hashes
@@ -6,7 +37,9 @@
 # Comandi da terminale
 
 ## Linux
-...
+- vedere versione sistema operativo:
+  - uname -a
+  - lsb_release -a
 
 ## Windows
 
@@ -649,7 +682,7 @@ used to audit organization's security for phishing attacks using various phishin
 
 # Priviledge Excalation
 
-# Peas
+## Peas
 Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere priviledge excalation
 
 - Windows:

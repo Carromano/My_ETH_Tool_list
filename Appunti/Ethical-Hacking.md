@@ -1,3 +1,29 @@
+# INDICE
+- [Footprinting](#footprinting)
+- [Scanning](#scanning)
+- [Enumeration](#enumeration)
+- [Windows Hacking](#hacking-windows)
+- [UNIX Hacking - Local](#hacking-unix---local-access)
+- [UNIX Hacking - Remote](#hacking-unix---remote-access)
+- [UNIX Hacking - Labs](#hacking-unix---labs)
+- [Cyber Crimes and APTs](#cyber-crimes-and-apts)
+- [Remote COnnectivity and VoIP Hacking](#remote-connectivity-and-voip-hacking)
+- [Wireless](#wireless-hacking)
+- [Hardware](#hacking-hardware)
+- [Web Security](#web-security)
+  - [SQL Injections](#sql-injections)
+- [Mobile Hacking]()
+
+<br>
+<br>
+<br>
+
+---
+
+<br>
+<br>
+<br>
+
 # Footprinting
 1. Determine the Scope
 2. Get Proper Authorization

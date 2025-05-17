@@ -8,8 +8,8 @@
 6. [Network Foot PRinting and Scanning](#network-footprinting-and-scanning)
 7. [Enumeration](#enumeration)
 8. [Exploitation](#exploitation)
-9. [Reverse shell](#reverse-shell)
-10. [password cracking](#password-cracking)
+9.  [password cracking](#password-cracking)
+10. [Reverse shell](#reverse-shell)
 11. [Malwares](#malwares)
 12. [social engineering](#social-engineering)
 13. [hiding tracks](#hiding-tracks)
@@ -23,7 +23,7 @@
 21. [mobile](#mobile-hacking)
 22. [IoT](#iot-and-ot-hacking-tools)
 23. [Cloud](#cloud-computing-tools)
-24. [Metasploit](#METASPLOIT)
+24. [Metasploit](#metasploit-1)
 
 <br>
 <br>
@@ -67,13 +67,17 @@
   - curl
 - rpcdump.py - tool from Linux, shows services bound to IP addresses
 - `sudo -l`   \# list all the current permissions
+- `lsof -i -P` - shows all open files and listening services
+- `df -a` - To see ram drives
 
 
 ## Windows
 
-- TASKLIST: fa vedere tutti i task attivi (tipo task manager)
-- epdump - tool from Microsoft windows resource kit, shows services bound to IP addresses
-
+- `TASKLIST` - fa vedere tutti i task attivi (tipo task manager)
+- `epdump` - tool from Microsoft windows resource kit, shows services bound to IP addresses
+- `reg query` - command to check for Registry entries
+- `at` - to find scheduled tasks
+- `pslogist` - to retrieve System and Security event logs
 
 <br>
 <br>
@@ -195,6 +199,7 @@ Tool per estrarre tutti i dati da uno specifico sito web dato l'url di arrivo.
 
 Estrae dettagli utili sull'url specificato nel campo di ricerca della pagina, come dettagli sull'organizzazione, servers, IP, ecc...  
   
+
 ## Teleport Pro - Windows
 Applicazione per scaricare le pagine web per consultarle offline
 
@@ -215,10 +220,10 @@ Linux:
 > _UDP_: traceroute link.dom  
 > _TCP_: tcptraceroute link.dom
 
-# whois
+## whois
 tool da terminale o da web (https://who.is/). è il protocollo per l'interrogazione dei database che ospitano informazioni riguardanti gli assegnatari di una risorsa Internet come nomi di dominio, indirizzi IP e sistemi autonomi.
 
-# DNS interrogation
+## DNS interrogation
 
 useful commands / Scripts
 - dnsrecon  
@@ -425,6 +430,9 @@ Estenzione web che mostra tutte le componenti di una pagina e tutti i linguaggi 
 permette di vedere tutte le connessioni attualmente attive su windows
 
 > netstat -aon
+>
+> netstat -anlp
+>
 
 ## crackmapexec
 tool in python utile per fare pentesting a livello di rete per Active Directory. Funziona bene con SMB
@@ -556,6 +564,11 @@ per usare la shell da python
 > import os
 > os.setuid(0)  // se il binario di python ha il setuid abilitato si fa privex così
 > os.system("shell commands")
+
+## ffuf
+fuzzing tool for web sites:
+
+> ffuf -w [wordlist] -u [URL] -h hostname -fs ...
 
 
 <br>
@@ -861,6 +874,11 @@ used to audit organization's security for phishing attacks using various phishin
 >  https://ohphish.eccouncil.org 
 
 
+## Tools utili per analizzare la sorgente delle mail
+
+- [robtex](https://www.robtex.com)
+- [PhishTank](https://www.phishtank.com/stats.php)
+
 <br>
 <br>
 
@@ -899,7 +917,8 @@ used to audit organization's security for phishing attacks using various phishin
 ## Rootkit
 best way to hide files, accounts, backdoors, network connections, etc. on a machine.
 
-# PRIVILEDGE ESCALATION
+
+# PRIVILEGE ESCALATION
 
 ## Peas
 Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere priviledge excalation
@@ -908,6 +927,20 @@ Tool che scansione il sistema ed elenca tutte le possibili strade per ottenere p
   - WinPeas
 - Linux:
   - LinPeas
+
+### LinPEAS - Linux Privilege Escalation Awesome Script
+
+A script that searches for possible paths to escalate priviledges on Unix (not just Linux) hosts:
+  - checks are explained on [hacktricks](book.hacktricks.xyz)
+
+This script is very noisy and easy to detect!!
+
+
+### LES - Linux Exploit Suggester
+Assist in detecting security deficiencies for given Linux kernel/Linux-based machine
+- Assess kernel exposures on publicly known exploits
+  - for each exploit exposure is calculated: Highly probable/probable/less probable/improbable
+- Verify state of kernel hardening security measures
 
 
 <br>

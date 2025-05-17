@@ -1,0 +1,12 @@
+{
+	"destination": "/home/martin/backups/",
+	"multiprocessing": true,
+	"verbose_log": false,
+	"directories_to_archive": [
+		"/home/app-production/app"
+	],
+
+	"exclude": [
+		".*"
+	]
+}

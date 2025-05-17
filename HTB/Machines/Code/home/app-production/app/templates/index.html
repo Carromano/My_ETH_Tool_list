@@ -1,0 +1,98 @@
+<!-- index -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div id="header">
+    <div>
+        <button id="run-button">Run</button>
+        <button id="save-button">Save</button>
+    </div>
+    <div class="auth-links">
+        {% if not session.get('user_id') %}
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+        <a href="#" id="about-link">About</a>
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('codes') }}" id="codes-link">My Codes</a>
+            <a href="{{ url_for('logout') }}" id="logout-link">Logout</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div id="editor">print("Hello, world!")</div>
+    <div id="output"></div>
+</div>
+
+<div id="about-modal">
+    <div id="about-modal-content">
+        <h2>About Code</h2>
+        <p>
+            Welcome to Code, your go-to Python code editor! Code is designed to provide a seamless and intuitive experience for writing and running Python code directly in your browser.
+        </p>
+        <button id="about-close">Close</button>
+    </div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Load the Ace editor modes and themes
+        ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/');
+        var editor = ace.edit("editor");
+        editor.session.setMode("ace/mode/python");
+        editor.setTheme("ace/theme/monokai");
+
+        function runCode() {
+            var code = editor.getValue();
+            $.post('/run_code', {code: code}, function(data) {
+                document.getElementById('output').textContent = data.output;
+            });
+        }
+
+        function loadCode(codeId) {
+            $.get('/load_code/' + codeId, function(data) {
+                editor.setValue(data.code, -1);
+            });
+        }
+
+        document.getElementById('run-button').addEventListener('click', runCode);
+        document.getElementById('save-button').addEventListener('click', function() {
+            var code = editor.getValue();
+            var name = prompt("Please enter the name for this script:");
+            if (name) {
+                $.post('/save_code', {code: code, name: name}, function(response) {
+                    alert(response.message);
+                });
+            }
+        });
+
+        // About modal functionality
+        document.getElementById('about-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('about-modal').style.display = 'flex';
+        });
+
+        document.getElementById('about-close').addEventListener('click', function() {
+            document.getElementById('about-modal').style.display = 'none';
+        });
+
+        // Check if code_id is provided in the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var codeId = urlParams.get('code_id');
+        if (codeId) {
+            loadCode(codeId);
+        }
+        document.getElementById('output').textContent = 'Click "Run" to execute code.';
+    </script>
+</body>
+</html>

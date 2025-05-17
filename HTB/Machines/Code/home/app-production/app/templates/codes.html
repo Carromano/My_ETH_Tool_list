@@ -1,0 +1,138 @@
+<!-- codes -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Codes</title>
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center horizontally */
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    color: #343a40;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 800px;
+    width: 100%;
+    height: auto; /* Adjust height to fit content */
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 28px;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+p {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+a.back-to-editor {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a.back-to-editor:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>My Codes</h2>
+    {% if codes %}
+        <ul>
+            {% for code in codes %}
+                <li>
+                    <a href="{{ url_for('index', code_id=code.id) }}">{{ code.name or 'Unnamed Code' }}</a>
+                    <form action="{{ url_for('codes') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="code_id" value="{{ code.id }}">
+                        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this code?');">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no codes saved.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}">Back to Editor</a>
+</div>
+
+</body>
+</html>
+

@@ -3,15 +3,18 @@
 - [Scanning](#scanning)
 - [Enumeration](#enumeration)
 - [Windows Hacking](#hacking-windows)
-- [UNIX Hacking - Local](#hacking-unix---local-access)
-- [UNIX Hacking - Remote](#hacking-unix---remote-access)
-- [UNIX Hacking - Labs](#hacking-unix---labs)
+- [UNIX HACKING](#hacking-unix---local-access)
+  - [UNIX Hacking - Local](#hacking-unix---local-access)
+  - [UNIX Hacking - Remote](#hacking-unix---remote-access)
+  - [UNIX Hacking - Labs](#hacking-unix---labs)
 - [Cyber Crimes and APTs](#cyber-crimes-and-apts)
 - [Remote COnnectivity and VoIP Hacking](#remote-connectivity-and-voip-hacking)
 - [Wireless](#wireless-hacking)
 - [Hardware](#hacking-hardware)
 - [Web Security](#web-security)
+  - [Web application Hacking](#web-application-hacking)
   - [SQL Injections](#sql-injections)
+  - [LABS](#web-security-labs)
 - [Mobile Hacking]()
 
 <br>
@@ -1664,6 +1667,29 @@ The injected code is not visible in a URL and so it's really more dangerous than
 
 ![stored](stored_xss.png)
 
+### DOM-Based XSS
+
+- Additional qualification for reflected and stored
+- Manipulation of the DOM to inject malicious code through various techniques such as JS event handlers.
+- Code Execution is triggered by specific user interctions, such as clicking a link, modifying form data or running JS code within the page
+
+![Dom-Based](DOM-Based XSS.png)
+
+### XSS IMPACT
+
+the attacker can be able to:
+  - steal sensitive informations: session tokens, cookies, data stored in the browser
+  - perform SESSION HIJACKING: impersonate a legitimate user and gain unauthorized access to accounts or systems
+  - Website defacement: malicious code can be injected to alter the website's appearence
+
+XSS cann be a stepping stone for more sophisticated attacks, like malware distribution or phishing
+
+### XSS mitigation
+1. input Validation on the server-side in order to sanitize user input before storing/running it
+2. Output encoding is crucial for stored XSS to prevent script execution when displaying untrusted data
+3. for DOM-based XSS secure coding practices and careful handling of user-controlled data within client-side scripts are essential 
+
+
 ## REQUEST FORGERY
 
 also known as `one-click attack, session riding, hostile linking`
@@ -1700,6 +1726,14 @@ If the user is currently authenticated, the site will have no way to distinguish
 - use one-time and secret CSRF tokens - can't be known by attackers
   - every XSS Vuln cancels every CSRF countermeasure
 
+<br>
+
+---
+
+<br>
+
+# SQL Injections
+
 ## SQL (structured query language) fundamentals
 
 - What Can SQL do?
@@ -1735,6 +1769,8 @@ SQLi are caused by:
   - missing input validation
   - application-generated queries that contains user input
 
+An useful tools can be SQLmap 
+
 ### SQLi Sinks
 Places where to inject our SQL code, which can be:
 - User input:
@@ -1749,6 +1785,11 @@ Places where to inject our SQL code, which can be:
 ![targets](sqli_targets.png)
 
 ### Techniques
+
+#### Detecting the version
+
+![version](SQLi_version.png)
+
 
 #### Terminating the query
 ---
@@ -1852,7 +1893,7 @@ Some Example:
 >> TABLE_NAME: NAme of the table    
 >> ...
 
-Attack Example:
+Attack Example:  
 ![image](schema_sqli_attack.png)
 
 ---
@@ -1880,6 +1921,12 @@ we can use commands to manage files if the permissions are not correctly set:
 
 ---
 
+### SQLi Impact
+- Retrieve hidden application data
+- subvert application logic
+- retrieving data outside the scope of the application
+- Execute code on the OS
+
 ### SQLi Countermeasures
 - Programmers must take care of input sanitization and avoid using "automagic methods"
 - Avoid manually crafted regex
@@ -1887,3 +1934,165 @@ we can use commands to manage files if the permissions are not correctly set:
 - If a number is expected, check that the input really is a number 
 - Parametrized query (if the language supports it)
   - `cursor.execute("INSERT INTO table VALUES ( %s, %s, %s)", var1 , var2 , var3 )`
+
+<br>
+
+---
+
+<br>
+
+# Web Security Labs
+What is a web application:
+  - Web server: HTML, CSS, media, javascript
+    - Typically with frameworks (Angular, React, ...)
+  - Server-side Scripting: PHP, Python, Perl, Node.js
+    - Typically with frameworks (Symfony, Django, Flask, ...)
+    - Application Logic is here
+  - Storage: containing data needed by the web application to work
+    - SQL or NOSQL DBMS, Files, ...
+  - Web Services: Software components accessible over the internet, providing specific functionalities to other applications
+  - APIs (Application Programming Language):
+    - Web apps use APIs to leverage the capabilities of web services 
+    - Enables them top perform actions like storing data, sending notifications, integrating with external systems, ...
+
+## OWASP Juice Shop
+"most modern and Sophisticated - insecure web application" - Useful for practice
+
+Can be installed with docker:
+
+> docker run --rm -e  NODE_ENV=unsafe -p 3000:3000 bkimminich/juice-shop
+>
+> http://localhost:3000/#/register
+
+## OWASP TOP 10 WEB APPLICATION SECURITY - 2021
+1. A01:2021-Broken Access Control: Users access beyond their permissions, leading to data breaches, misuse, and functionality 
+abuse
+   - Over-permissioned access: Too much access granted, not based on specific needs
+   - Bypassing checks: Manipulating URLs, application state, or API requests
+   - Insecure identifiers: Accessing others' accounts using unique IDs (IDOR)
+   - Unprotected APIs: Missing access controls for sensitive actions
+   - Privilege escalation: Unintentional or malicious elevation of user rights
+   - Metadata manipulation: Tampering with tokens, cookies, or CORS configurations
+   - Forced access: Sneaking into unauthorized or privileged areas
+2. A02:2021-Cryptographic Failures: Notable CWEs associated with Crypto Failures are CWE-259: Use of Hard-coded Password, 
+CWE-327: Broken or Risky Crypto Algorithm, and CWE-331 Insufficient Entropy
+   - Plaintext Transmission: use of unencrypted protocols like HTTP
+   - Weak Crypto: outdated algorithms and protocols + downgrade
+   - Randomness Issues: Non-cryptographically secure randomness, weak seeding
+   - Hash Function Hassles: Insecure, legacy, hash functions
+3. A03:2021-Injection
+4. A04:2021-Insecure Design
+5. A05:2021-Security Misconfiguration
+6. A06:2021-Vulnerable and Outdated Components
+7. A07:2021-Identification and Authentication Failures
+8. A08:2021-Software and Data Integrity Failures
+9.  A09:2021-Security Logging and Monitoring Failures 
+10. A10:2021-Server-Side Request Forgery
+
+## OWASP TOP 10 API SECURITY - 2023
+1. API1:2023 - Broken Object Level Authorization
+2. API2:2023 - Broken Authentication
+3. API3:2023 - Broken Object Property Level Authorization
+4. API4:2023 - Unrestricted Resource Consumption
+5. API5:2023 - Broken Function Level Authorization
+6. API6:2023 - Unrestricted Access to Sensitive Business Flows
+7. API7:2023 - Server-Side Request Forgery
+8. API8:2023 - Security Misconfiguration
+9. API9:2023 - Improper Inventory Management
+10. API10:2023 - Unsafe Consumption of APIs
+
+## JSON Web Tokens (JWTs)
+JSON Web Tokens are an open, industry standard method for representing claims securely between two parties. JWTs are sometimes used as session cookies. Composed by 3 parts, All encoded with base64 and separated by dots:
+1. Header (json)
+    - Here is contained the Type of encryption used
+3. Payload (json)
+4. Signature (header + payload) (bin)  
+
+![JWT_cookie](JWTs.png)
+
+![JWT_DEC](JWT_dec.png)
+
+Older implementations had bugs about signing algorithm downgrading to "none" -> arbitrary changes on payload.
+
+Attacks can be implemented to break A01:2021 and A02:2021
+
+## WEB APPLICATION ENUMERATION
+
+Essential, for instance, in the reconnaissance stage and lateral movement. 
+1. Play around with the application, understand its behaviour and potential weaknesses:
+   - use the web application as a regular user and "document" interesting features
+   - Where possible, sign up and explore the internals of the application
+   - Try to access well-known resources that can provide useful insights
+   - fuzz some elements (e.g. parametrers, cookies, headers, ...) and see what happens
+   - Examples:
+     - browse the e-commerce site
+     - robots.txt
+     - .well-known/security.txt
+     - API fuzzing
+2. Determine other virtual hosts
+   - find other web applications or endpoints hosted on the same machine
+   - Different virtual hosts may share the same X509 ccert
+     - unless target uses SERVER NAME INDICATION (SNI)
+   - Search engines - Bing used to support "ip:"
+   - Virtual Host Brute-forcing (tools) - CONSIDERED AN ATTACK !
+   - Useful tools: gobuster
+
+## Path Traversal
+Crafting malicious input to access unauthorized files and directories. Esploiting vulnerabilities in how applications handle user-supplied input. 
+
+Part of A01:2021-Broken Access Control
+
+### Path Traversal encodings
+
+|[encodings](PATH_TRAVERSAL_encodings.png)
+
+## File Upload
+
+part of multiple categories of OWASP TOP 10.
+
+Mainly Caused by UNCHECKED UPLOADS: server allows any file type without validation (or bypassable validation).
+   - Malicious File Types: uploads can contain harmful scripts for RCE
+   - Content Tampering: uploads can modify website content or user data
+
+Just the act of uploading the file is in itself enough to cause damage. Other attacks may involve a follow-up HTTP request for the file, to trigger its execution by the server.
+
+### Local File Inclusion (LFI)
+
+Trick the web application to load, render and possibly execute some content from a local source. Typically found in parameters (GET, POST, Cookies) loading legit files from an application directory (e.g. language definitions: `/index.php?lang=/lang/italian.json`; parametrized image loading: `/product?pic=/assets/flowers.png`)
+
+---
+
+### Remote File Inclusion (RFI)
+
+Trick the web application to load some content from a REMOTE source. Very similar to LFI, but more dangerous. A remote content is included in the page rendered server-side
+
+--- 
+
+## A03:2021-Injection
+In short, an injection is a manipulation that can be used to make the application perform unintended actions.
+
+It happens when the application directly incorporates user-supplied data into dynamic queries or commands (like SQL statements, scripts or system commands); or when the application doesn't perform proper escaping or context-aware handling.
+
+some types of injection are: 
+  - [XSS](#xss)
+  - [SQLi](#sql-injections)
+  - server side template injection
+  - OS Command Injection
+
+### Server-Side Template Injection (SSTI)
+
+Web application often use template languages, that help separate the structure and presentation of a web page from the business logic (example: jinja). Sometimes web applications insecurely render user provided content as part of the template.  
+
+Since templating languages typically allow running native code, SSTi often leads to RCE. Even when we cannot do RCE, the impact can be SEVERE: information disclosure, DoS, Defacement, ...
+
+To understand if there is a SSTI vuln -> try with a full strange characters string to search for errors.
+
+--- 
+
+### OS Command Injection
+
+The most "direct" form of RCE. A system is vulnerable to OS command injection when it insecurely uses user input to build a command line. 
+
+**How to exploit OS command Injection**: we terminate the shell command and add our code using `;` to terminate the old command and `#` to comment the rest
+
+--- 

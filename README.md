@@ -377,6 +377,11 @@ tool da terminale linux che serve per enumerare le porte di un server HTTP.
 > per enumerare i virtual host
 >> gobuster vhost -w /usr/share/seclists/Discovery/DNS/fierce-hostlist.txt -u www.google.com
 
+# dirsearch
+tool per enumerare tutte le cartelle accessibili di un dominio web. Ad esempio:
+
+> dirsearch -u cypher.htb -t 50 -x 404
+
 ## OWASP's dirbuster
 
 tool per enumerare file e cartelle ricorsivamente. Facile da rilevare -> proxare con privoxy per nascondere le tracce
@@ -574,6 +579,11 @@ per usare la shell da python
 fuzzing tool for web sites:
 
 > ffuf -w [wordlist] -u [URL] -h hostname -fs ...
+
+for DNS enumeration:
+> ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt  -H "Host: FUZZ.cypher.thm" -u http://10.10.11.57
+
+
 
 ## IMPACKET SUITE
 

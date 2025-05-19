@@ -1,4 +1,4 @@
-# Machine's solutions
+# Easy Machine's solutions
 
 ## Code - LINUX
 
@@ -29,5 +29,14 @@
 - container exploitation
 - crontab per fare privesc
 
-## ALTRE MACCHINE PERSE NEL CRASH DI KALI...
+## Titanic
 
+- LFI
+- Password Cracking
+- Fuzzing and Searching in Remote PC
+- Vulnerable Software exploitation -> magick
+
+
+# Medium Machine's solutions
+
+## Cypher

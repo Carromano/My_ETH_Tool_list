@@ -1,0 +1,11 @@
+# Dirsearch started Mon May 19 20:56:26 2025 as: /usr/lib/python3/dist-packages/dirsearch/dirsearch.py -u cypher.htb -t 50 -x 404
+
+200     5KB  http://cypher.htb/about
+200     5KB  http://cypher.htb/about.html
+307     0B   http://cypher.htb/api    -> REDIRECTS TO: /api/docs
+307     0B   http://cypher.htb/api/    -> REDIRECTS TO: http://cypher.htb/api/api
+307     0B   http://cypher.htb/demo    -> REDIRECTS TO: /login
+307     0B   http://cypher.htb/demo/    -> REDIRECTS TO: http://cypher.htb/api/demo
+200     4KB  http://cypher.htb/login.html
+200     4KB  http://cypher.htb/login
+301   178B   http://cypher.htb/testing    -> REDIRECTS TO: http://cypher.htb/testing/

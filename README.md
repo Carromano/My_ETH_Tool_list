@@ -50,6 +50,9 @@
 - [One Gadget](https://github.com/david942j/one_gadget)
 - [NC for windows](https://github.com/int0x33/nc.exe/)
 
+## Wordlists
+- [pwdb-public](https://github.com/ignis-sec/Pwdb-Public.git)
+
 <br>
 <br>
 
@@ -367,6 +370,12 @@ tool da terminale linux che serve per enumerare le porte di un server HTTP.
 
 > alcuni tag utili:
 >> --wordlist: serve per specificare la wordlist da usare per ricercare le directory
+
+> Per enumerare i sottodomini:
+>> gobuster dns -w /usr/share/seclists/Discovery/DNS/fierce-hostlist.txt -d google.com
+>
+> per enumerare i virtual host
+>> gobuster vhost -w /usr/share/seclists/Discovery/DNS/fierce-hostlist.txt -u www.google.com
 
 ## OWASP's dirbuster
 

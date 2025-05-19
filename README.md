@@ -62,6 +62,8 @@
 # Comandi da terminale
 
 ## Linux
+- eseguire file con SUID come l'utente impostato:
+  - `./file -p`
 - vedere versione sistema operativo:
   - uname -a
   - lsb_release -a

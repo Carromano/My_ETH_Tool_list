@@ -1499,6 +1499,9 @@ BluetoothView is a utility that monitors the activity of Bluetooth devices in th
 - DroidSheep: https://droidsheep.info
 - Orbot Proxy: https://guardianproject.info
 - PhoneSploit: su github
+- apktool: code.google.com/p/android/apktool
+  - Disassembles dex code into smali (Raw Dalvik VM bytecode). Can be used to embed malicious code into apps
+- SignApk, to verify the repacked file
 
 
 ## iOS Hacking Tools

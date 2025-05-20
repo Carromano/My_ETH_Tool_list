@@ -15,7 +15,9 @@
   - [Web application Hacking](#web-application-hacking)
   - [SQL Injections](#sql-injections)
   - [LABS](#web-security-labs)
-- [Mobile Hacking]()
+- [Mobile Hacking](#mobile-hacking---android)
+  - [Android](#mobile-hacking---android)
+  - [iOS](#mobile-hacking---ios)
 
 <br>
 <br>
@@ -2096,3 +2098,325 @@ The most "direct" form of RCE. A system is vulnerable to OS command injection wh
 **How to exploit OS command Injection**: we terminate the shell command and add our code using `;` to terminate the old command and `#` to comment the rest
 
 --- 
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# Mobile Hacking - Android
+
+People argue about whether Android is truly open-source, but some products and versions are kept secret by google.
+
+Basically uses linux kernel, developers can use C and C++.
+
+Many users are using out-of-date OS varsions.
+
+![Android_versions](Android_versions.png)
+
+Malwares had an explosive growth in the last decades. We need to start using antiviruses on android. 
+
+## Android Fundamentals
+
+![architecture](Android_Architecture.png)
+
+Each application runs in its own instance of Dalvik VM 
+- Makes applications work on many devices 
+- Very limited power, memory, storage 
+- Apps are written in Java, transformed to dex (Dalvik Executable) 
+- Dalvik is open source
+
+### Sandbox
+
+- Each application runs in a separate process with a unique User ID
+- Apps cannot interact with each other
+- Sandbox is implemented in kernel
+
+### File System Security
+- Android 3.0 and later encrypts file system with AES 128 to protect data on a stolen phone 
+- System partition is read-only, unless user is root 
+- Files created by one app can't be modified by a different app
+
+### Memory Security
+Address Space Layout Randomization (ASLR) and NX bit (No eXecute)
+
+### Protected APIs
+User must agree to grant an app permissions.
+
+### Certificates
+All apps must be signed with a certificate, BUT it can be self-signed (no CA).
+
+### Software Developing Kit
+Android Emulators or Android Debug Bridge (Command-line tool to communicate with emulator or physical device) 
+
+## Hacking your Android
+### ROOTING
+---
+
+Privilege escalation attack -> Esploit a vulnerability to gain root priviledges.
+
+It has some risks:
+  - Bricking your phone by corrupting the OS -> may need a new phone
+  - Compromise security of OS, enabling more malwares
+
+#### Android Rooting Tools
+- ROOTx: Root for almost all ANDROID devices 
+- SuperOneClick: native windows application, runs on linux and Mac with Mono. it's the most universal tool.
+  - Run SuperOneClick on a Computer; Connect the phone with a USB cable; turn on "USB Debugging". 
+- Z4Root: Android APP
+- GingerBreakl: Doesn't work on all devices
+#### Rooting a Kindle Fire
+Kindle Fire OS is a customized version of Android 2.3 that cannot access the Android Market. Tool: BURRITO ROOT
+
+#### APPS FOR ROOTED ANDROID
+- **Superuser**: Controls applications that use root priviledges. Pops up asking permission each time and app uses the su binary
+- **ROM Manager**: Manage custom ROMS, so you can have the latest version on your device
+- **Market Enabler**: spoof your location and carrier network to the Android market in order to let you use apps that are restricted to certain countries, regions or carriers.
+- **ConnectBot**: SSH client to execute shell commands remotely
+- **ES File Manager**: copy, paste, cut, create, delete, and rename system files
+- **Set CPU**: sets the CPU clock
+- **Juice Defender**: Save power and extend battery life by managing hardware components
+---
+
+### Native Apps on Android
+A cross compiler is a compiler capable of creating executable code for a platform other than the one on which the compiler is running. For example a compiler that runs on a Windows PC but generates code on an Android smartphone is a cross compiler.
+  - Compile open source Linux tools for android (for attacks?)
+  - Develop apps (exploits) on a PC and compile them for ARM
+
+Androide native develpment Kit in SDK lets you develop apps for thje Dalvik Virtual Machine
+
+### Precompiled binary tools for Android
+- BusyBox: a set of UNIX tools that allows you to execute useful commands, like tar, dd, wget 
+- Tcpdump: capture in PCAP file and display packets that are transmitted over a network 
+- Nmap: discover hardware and software on a network to identify specific details of the host operating system, open ports, DNS names, and MAC addresses, 
+- Ncat: read and write data across networks from the command line for making various remote network  connections
+
+### Trojan apps
+Easy to insert a malicious code inside legitimate APK files: open APK with 7-zip:
+  - Manifest - XML file defining SW components and permissions
+  - Classes.dex - Dalvik executable with compiled code
+
+#### APP entry points
+Broadcast receiver:
+  - enables apps to receive "intents" from system
+  - Like interrupts
+  - Example: RUN when an SMS is received
+
+Services:
+  - runs in background, no GUI shown to User
+
+#### App Re-packaging 
+
+Android Trojan App Process:
+  - Take a legitimate application, disassemble the dex code, decode the Manifest.
+  - Include the malicious code, assemble the dex, encode the manifest
+  - Sign the final APK file
+  - One tool can be: [apktool](code.google.com/p/android/apktool) - Disassembles dex code into smali (Raw Dalvik VM bytecode). Can be used to embed malicious code into apps
+  - Another tool is **SignApk**, to verify the repacked file
+
+
+
+## Hacking other's Android
+
+### Remote Shell via WebKit
+WebKit is an open-source Web browser engine. 
+
+- Vulnerability: handled floating point data types incorrectly (patched in Android 2.2) 
+  - Drive-by download from a malicious Web server hosting a malicious HTML file. 
+  - Access to HTML file returns a remote shell (but not root) 
+
+- Countermeasures: updates & antivirus 
+
+### Root Exploits
+How to gain root on the exploited device?
+  - exploid
+  - RageAgainstTheCage
+  
+Countermeasures: Update & Antivirus
+
+### Data Stealing Vulnerability
+A malicious website can steal data from the SD card and from the device itself as long as root privileges not required 
+
+User must click a malicious link:
+  - Exploit is a PHP file with embedded JavaScript 
+  - User sees a notification, which may warn them 
+  - Attacker must know name & path to file (WebKit vulnerability can be used)
+
+Countermeasures:
+  - Use latest version of Android: CyanogenMod custom ROM enables you to use a new version even if your carrier blocks the update 
+  - Install antivirus
+  - Temporarily Disable JavaScript 
+  - Use a third-party browser like Firefox or Opera 
+  - Unmount sdcard
+
+### Remote Shell with Zero Permissions
+Using carefully chosen functions, it's possible to open a remote shell with no permissions from the user: it works in all versions of Android, even 4.0, Ice Cream Sandwich
+
+### Capability Leaks
+Stock software exposes permissions to other applications. Enables untrusted apps to gain privileges the user didn't allow. Explicit and implicit capability leak
+
+
+### URL sourced malware
+2 examples can be Zeus and Spyeye
+
+### Carrier IQ
+Pre-installed on devices: monitors activiry and sends it back to the carrier. Not entirely malicious, intended to improve performance by measuring diagnostic data. Huge privacy controversy: it's a form of ROOTKIT.
+
+### Google Wallet PIN
+- Currently works on almost every phone 
+- Stores encrypted data in a Secure Element (SE) 
+- Requires user-defined 4-digit PIN and five incorrect PIN entries locks the applicatio; but PIN is not in the SE: Hashed PIN can be broken by brute-force 
+- Countermeasure: Don't root your Wallet phone 
+- Tool: HTC Logger
+
+## Android as a Portable Hacking Platform
+- Network sniffer (Shark for Root) 
+- Network Spoofer (ARP spoofing) 
+- Connect Cat (like netcat) 
+- Nmap for Android
+
+## Defending Your Android
+- Maintain physical security 
+- Lock your device (PIN or password) 
+- Avoid installing apps from unknown sources
+- Install antivirus software 
+- Enable full internal storage encryption (Available in Android 3.0 and later)
+- Update to latest Android version (May require custom ROM)
+
+<br>
+
+--- 
+
+<br>
+
+# Mobile Hacking - iOS
+
+## How Secure is iOS?
+- Originally iPhone allowed no third-party apps at all 
+- Since 2008, the App Store appeared 
+- Early iOS versions were very insecure 
+  - All apps ran as root 
+  - No sandbox 
+  - No code signing 
+  - No ASLR 
+  - No Position Independent Executable (PIE) support
+- Security Measures Added in Later Versions 
+  - Third-party apps run as less privileged account "mobile", not root 
+  - Sandboxing limits apps to a limited set of system resources 
+  - Apps have to be signed by Apple to execute 
+  - Code signature verification is at load time and runtime 
+  - ASLR for system components and libraries 
+  - PIE causes apps to load at different base address upon every execution
+
+### iPhone 3GS
+The iPhone 3GS was the giant leap forward in encryption:
+  - AES encryption on by default 
+  - Encryption is very fast 
+  - Key is stored in flash memory, but locked with user's PIN 
+    - Data wipe after 10 guesses is an optional feature
+
+## Hacking your iPhone: Jailbreaking
+Jailbreaking is Taking full control of an iOS device. It allows:
+  - Customization of the device 
+  - Extensions to apps 
+  - Remote access via SSH or VNC 
+  - Arbitrary software  
+  - Compiling software on the device 
+
+Cydia is The App Store for jailbroken devices
+
+### Risks of Jailbreaking
+- Worries about trojans in jailbreak apps: never yet observed for well-known jailbreak apps 
+- Jailbroken phones lose some functionality: vendors can detect jailbreaks and block function (iBooks did this) 
+- Code signature verification is disabled by jailbreaking 
+- Expose yourself to a variety of attack vectors
+
+### Boot-based Jailbreak Process
+1. Obtain firmware image (IPSW) for iOS version and device model from Apple servers 
+2. Obtain jailbreak software: redsnow, greenpoison, limera1n 
+3. Connect computer to iphone with USB cable 
+4. Launch jailbreak app
+5. Select IPSW and wait for customizing
+6. Switch iPhone into Device Firmware Update (DFU) mode:
+   1. Power iPhone off 
+   2. Hold Power+Home buttons for 10 sec. 
+   3. Release Power but hold Home down for 5-10 more seconds
+7. Jailbreak software completes the process
+
+### Remote Jailbreaking - Jailbreakme.com
+
+- Just load a PDF file and exploits MobileSafari, jailbreaking the OS 
+- Much easier than boot-based jailbreak
+
+---
+
+## Hacking Other iPhones
+
+### Attack Options
+- Local network-based attacks: wireless MITM requires physical proximity 
+- Attacker with physical access to device 
+  - Boot-based jailbreak 
+- Client-side attacks 
+  - App vulnerabilities, mainly MobileSafari 
+  - Far more practical 
+  - But exploiting an app only grants access to data in the app's sandbox
+- Breaking out of the sandbox (requires a kernel-level vulnerability)  
+- Exploits used in Jailbreakme can be repurposed for attack tools 
+
+### Jailbreakme3.0 Vulnerabilities
+- Uses a PDF bug and a kernel bug, yechniques similar can be used for malicious purposes 
+- If you jailbreak, you can't update iOS 
+- In order to jailbreak, you must use a vulnerable iOS version
+ 
+- Countermeasure: Update iOS to latest version 
+
+### iKEE Attacks!
+- People jailbroke iPhones, installed OpenSSH, and left the default password 'alpine' unchanged 
+- 2009: First iPhone worm rickrolled victims 
+- Later versions made an iPhone botnet
+
+Countermeasures: 
+- Don't jailbreak! 
+- Change the password 
+- Enable SSH only when needed (SBSettings makes this easy)
+- Upgrade iOS to the latest jailbreakable version 
+- Install patches made available by the  community
+
+
+### iPhone Remote Attacks
+
+- If you don't jailbreak your iPhone, it's very safe 
+- Only one port is open 
+  - TCP 62087 
+  - No known attacks 
+  - Tiny attack surface 
+  - No SSH, SMB, HTTP... 
+- Almost impossible to gain unauthorized access from the network 
+
+### Remote Vulnerabilities
+- ICMP request causes device reset (CVE-2009-1683) 
+- SMS message arbitrary code execution exploit (CVE-2009-2204)
+
+### FOCUS 11 Wireless MITM Attack
+- Malicious wireless access point simulated with a Mac laptop and two network cards in 2011 Conference in Las Vegas 
+- Certificate chain validation vulnerability exploited to MITM SSL connections 
+- PDF used JailBreakMe3.0 attack to silently root the device 
+- SSH and VNC installed 
+- Countermeasures:
+  - Possible to take full control of iPhone 
+  - Update iOS bundle
+  - Configure your iPhone to "Ask to Join Networks" 
+  - Don't store sensitive data on your phone
+
+### Physical Access
+- Boot-based jailbreak 
+- Install SSH server 
+- Access to data, including passwords in keychain 
+  - Takes 6 min. to do 
+- Countermeasures:
+  - Encrypt data using Apple features and third-party tools from McAfee, Good, etc. 
+  - Use a passcode of 6 digits or more 
+  - Install remote-tracking software to recover a stolen or lost device, or remotely wipe it 

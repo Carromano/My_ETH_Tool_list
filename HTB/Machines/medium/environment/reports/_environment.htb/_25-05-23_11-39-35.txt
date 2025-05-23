@@ -1,0 +1,36 @@
+# Dirsearch started Fri May 23 11:41:33 2025 as: /usr/lib/python3/dist-packages/dirsearch/dirsearch.py -u environment.htb -t 50 -x 404
+
+403   555B   http://environment.htb/%2e%2e;/test
+403   555B   http://environment.htb/admin/.config
+403   555B   http://environment.htb/admpar/.ftppass
+403   555B   http://environment.htb/admrev/.ftppass
+403   555B   http://environment.htb/bitrix/.settings
+403   555B   http://environment.htb/bitrix/.settings.bak
+403   555B   http://environment.htb/bitrix/.settings.php.bak
+301   169B   http://environment.htb/build    -> REDIRECTS TO: http://environment.htb/build/
+403   555B   http://environment.htb/build/
+403   555B   http://environment.htb/ext/.deps
+200     0B   http://environment.htb/favicon.ico
+200     2KB  http://environment.htb/index.php/login/
+403   555B   http://environment.htb/lib/flex/uploader/.actionScriptProperties
+403   555B   http://environment.htb/lib/flex/uploader/.flexProperties
+403   555B   http://environment.htb/lib/flex/varien/.actionScriptProperties
+403   555B   http://environment.htb/lib/flex/uploader/.project
+403   555B   http://environment.htb/lib/flex/varien/.flexLibProperties
+403   555B   http://environment.htb/lib/flex/uploader/.settings
+403   555B   http://environment.htb/lib/flex/varien/.settings
+403   555B   http://environment.htb/lib/flex/varien/.project
+200     2KB  http://environment.htb/login
+200     2KB  http://environment.htb/login/
+302   358B   http://environment.htb/logout    -> REDIRECTS TO: http://environment.htb/login
+302   358B   http://environment.htb/logout/    -> REDIRECTS TO: http://environment.htb/login
+403   555B   http://environment.htb/mailer/.env
+403   555B   http://environment.htb/resources/sass/.sass-cache/
+403   555B   http://environment.htb/resources/.arch-internal-preview.css
+200    24B   http://environment.htb/robots.txt
+403   555B   http://environment.htb/storage/
+301   169B   http://environment.htb/storage    -> REDIRECTS TO: http://environment.htb/storage/
+403   555B   http://environment.htb/twitter/.env
+405   245KB  http://environment.htb/upload/
+405   245KB  http://environment.htb/upload
+403   555B   http://environment.htb/vendor/

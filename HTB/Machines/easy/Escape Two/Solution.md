@@ -207,7 +207,7 @@ SYSVOL          Disk      Logon server share
 Users           Disk        
 ```
 
-Accedo al primo disco perchè non ha commenti particolari
+Accedo al primo disco 
 > smbclient //10.10.11.51/Accounting\ Department -U rose
 
 facendo `ls` noto 2 excel:

@@ -29,14 +29,27 @@
 - container exploitation
 - crontab per fare privesc
 
-## Titanic
 
+## Titanic
 - LFI
 - Password Cracking
 - Fuzzing and Searching in Remote PC
 - Vulnerable Software exploitation -> magick
 
 
+## Fluffy
+
+
+
 # Medium Machine's solutions
 
 ## Cypher
+- exploit di una vulnerabilità nota (Cypher Injection) per ottenere una reverse shell
+- Eseguibile con SUID attivo
+- Leak di file inseriti come parametri all'eseguibile con SUID (flag di root)
+
+## Environment
+- Laravel Environment Bypass vulnerability
+- WebShell PHP tramite caricamento immagini
+- crack delle chiavi GPG (procedura online) per ottenere password
+- exploit di ENV_KEEP: `env_keep+="ENV BASH_ENV"` per fare privesc

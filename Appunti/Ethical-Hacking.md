@@ -4,8 +4,8 @@
 - [Enumeration](#enumeration)
 - [Windows Hacking](#hacking-windows)
 - [UNIX HACKING](#hacking-unix---local-access)
-  - [UNIX Hacking - Local](#hacking-unix---local-access)
   - [UNIX Hacking - Remote](#hacking-unix---remote-access)
+  - [UNIX Hacking - Local](#hacking-unix---local-access)
   - [UNIX Hacking - Labs](#hacking-unix---labs)
 - [Cyber Crimes and APTs](#cyber-crimes-and-apts)
 - [Remote COnnectivity and VoIP Hacking](#remote-connectivity-and-voip-hacking)
@@ -91,6 +91,7 @@
   + Nessus, OpenVAS, ...
 - Basic banner grabbing 
   + manual or automatic
+    + netcat is very useful with verbose option `nc -v www.example.com`
 - Enumerating common network services
   + FTP - TCP 21
   + Telnet - TCP 23
@@ -98,13 +99,17 @@
     + SMTP can be enumerated with Telnet, using these commands
       - VRFY confirms names of valid users
       - EXPN reveals the actual delivery addresses of aliases and mailing lists  
+    + Perl script vrfy.pl
   + DNS - TCP/UDP 53
     + nslookup / dig (for BIND DNS)
     + dns enumerators
   + TFTP - TCP/UDP 69
-    + ineherently insecure
+    + ineherently insecure - everyone connected can get every file. You must know the name (Bruteforce!)
+      > TFTP [IP]
+      > get /etc/passwd /tmp/passwd.cracklater
   + Finger - TCP/UDP 79
     + Shows users on local or remote systems, if enabled - CARE FOR SOCIAL ENGINEERING
+      > finger -l @target.example.com
   + HTTP - TCP 80
     - Automatic tools -> Grendel Scan
    + MIcrosoft RPC Endpoint Mapper (MSRPC) - TCP 135
@@ -112,8 +117,14 @@
      + epdump - tool from Microsoft windows resource kit, shows services bound to IP addresses
    + NetBIOS Name Service - UDP 137
      + Name service in Microsoft, DNS-like
+       > net view /domain                         -> enumerate domains  
+       > net view /domain:corleone                -> to enumerate a specific domain  
+       > nltest /dclist:corleone                  -> to enumerate domain controllers  
+       > netviewx -D CORLEONE -T dialin_server    -> useful to get an idea of the number of dial-in server that exist in the network  
+       > nbtstat [IP]  
    + NetBIOS Session - TCP 139
      + Null sessions - the windows server message block (SMB) protocol hands out a wealth of information freely
+       > net use $\\[IP]\[NAME]$$ "" /u:""
    + SNMP - UDP 161
      +  SNMP is intended for network management and monitoring It provides inside information on net devices, software and systems
         +  ENUMERATION TOOLS AVAILABLE
@@ -190,9 +201,15 @@
     - netcat
     - psexec (from windows CLI)
     - fpipe for port redirection
+      > fpipe −v −l 53 −r 23 192.168.56.101
 
   - Covering Tracks:
-    - Disable Auditind - auditpol
+    - Disable Auditing - `auditpol` to check, `disable` argument to disable it
+    - Clearing event logs - elsave
+    - Hiding Files: 
+      - `attrib +h [directory]`
+      - Alternate Data Streams (ADS): NTFS enables files to be hidden into another file - `cp nc.exe oso1.009:nc.exe` -> `start oso001.009:nc.exe`
+    - Rootkits
 
 - Countermeasures
   - When a sistem get compromised with admin priviledges, it should get completely reinstalled
@@ -209,6 +226,167 @@
 --- 
 
 <br>  
+<br>
+
+# Hacking Unix - Remote Access
+## 1. Unix systems and hacking tools
+Unix is used by the mayority of servers around the globe. There are many types of Linux distributions and the source code is available. Furthermore, it is easy to modify and to develop a program for it.
+
+Being a widespread system, has as a consequence the higly attractiveness of the system for attackers.
+
+Linux has 2 types of access: user and **ROOT** access
+
+The attacker performs the following steps to identify linux distro, open ports, RPC servers and the version of running applications:
+1. Footprinting - Gather informations and profiling the target
+  + whois, nslookup, dig, FOCA, MALTEGO, ...\
+2. Scanning - identify entry points for the intrusion
+  + nmap, netcat, tcpdump, nsdlookup, Nessus
+3. Enumeration - probe the identified services to fully know weaknesses. This involves active connections to systems and directed queries.
+  + dnsenum, rpcinfo, smbclient
+4. Vulnerability Mapping - Map attributes (listening services, version of running servers) to potential security holes:
+  - Vulnerability info databases  online
+  - Use Public exploit codes or write your own
+  - Use atomated vulnerability scanning tools
+
+### Metasploit Framework
+The metasploit framework provides the infrastructure, content and tools to perform penetration tests and extensive security audits. It comprises reconnaissance, exploit development, payload packaging and delivery of exploits to vulnerable targets.
+
+![architettura metasploit](images/metasploit-architecture.png)
+
+**Module**: A standalone piece of code or software that extends the funcionality of the Metaploit Framework. A module can be an exploit, escalation, scanner or information gathering unit of code that interfaces with the framework to perform some operations.
+
+**Session**: a session is a connection between a target and the machine running Metasploit. Sessions allow for commands to be sent to and executed by the target machine.
+
+#### Metasploit Modules 
+
+**Exploits**: Exploits are the code and commands that Metasploit uses to gain access.
+
+**Payloads**: Payloads are what are sent with the exploit to provide the attack a mechanism to interact with the exploited system.
+
+**Auxiliary**: The Auxiliary modules provide many useful tools including wireless attacks, denial of service, reconnaissance
+scanners, and SIP VoIP attacks.
+
+**NOPS**: No Operation. NOPs keep the payload size consistent
+
+**Post-Exploitation**: can be run on compromised targets to gather evidence, pivot deeper into a target network, ecc...
+
+**Encoders**: are used to successfully remove unwanted bytes
+
+#### Metasploit INterfaces
+
+Metasploit has multiple interfaces including:
+- msfconsole - an interactive command-line like interface
+- msfcli - a literal Linux command line interface
+- Armitage - a GUI-based third partyt application
+- msfweb - browser based interface
+
+#### Metasploit Console
+has a simple interface. Allows users to search for modules, configure those modules and execute them against specified targets with chosen payloads.
+
+Provides management interface for opened sessions, network redirection and data collection.
+
+#### Starting metasploit
+1. start the PostgreSQL database for Metasploit: `service postgresql start`
+2. launch metasploit framework console: `mfsconsole` 
+
+Core commands:
+   + msf > show exploits
+   + msf > show payloads
+   + msf > search Variable
+   + msf > show options
+   + msf > set Variable
+   + msf > info
+   + msf > exploit
+
+Sample operation:
+  + Open Metasploit Console
+  + Select Exploit
+  + Set Target
+  + Select Payload
+  + Set Options
+  + exploit
+
+## 2. Exploit and gain remote access to unix
+
+In Unix attacks, attackers follow a logical progression:
+1. gain remote access via the network - Tipically exploiting a vulnerability in a listening service
+2. Have a Command shell or login to the system - Local attacks are also called Priviledge Escalation Attacks
+
+### Primary methods to gain remote access
+#### 1. exploit a listening service
+if a service is not listening, it cannot be broken remotely. Services that allow interactive logins can be exploited: telnet, ftp, rlogin, ssh, others...
+
+BIND is the most popular DNS server, and it has many vulnerabilities
+
+**How To Exploit**:
+- Brute force attacks:
+  + Service that can be bruteforced: telnet, rlogin/rsh, ssh, SNMP, LDAP, POP/IMAP, HTTP/HTTPS, CVS, SVN, Postgres, MySQL, Oracle
+  + using list of user accounts obtained during enumeration phase: Finger, rusers, sendmail, ...
+  + obtaining access to accounts with weak or no passwords
+  + some automated tools: hydra or medusa
+- Data Driven attacks: sending data to an active service causing unintended or undesirable results
+  + buffer overflow: a user or process attempts to place more data into a buffer than was previously allocated (associated with specific C functions)
+    + normally cause a segmentation violation, but attackers can exploit it in the target system to execute a malicious code of their choosing
+    + different ways to attack: jump to a function, jump to the buffer and execute the inserted code, return to libc
+    + Returned Oriented Programming (ROP): generalization of return-to-libc attacks. Instead of returning to system functions return to existing code that is already in the program's addressable space. Create arbitrary code by chaining short code sequences (to make a shellcode for example)
+    + Some countermeasures: Stack smashing and execution Protection, ASLR, 
+  + Format String attacks: exploit vulnerabilities in the printf from a buffer, when it uses format strings such as %d, %s, ... There are some strings that can help printing addresses or to print in stack (%n)
+  + Input validation attacks: possible when the server does not properly parse input before passing it to further processing.
+    + Telnet daemon passes syntactically incorrect input to the login program -> an attacker could bypass authentication without being prompted for a password.
+    + These attacks work when user-supplied data is not tested and cleaned before execution.
+      + Two approaches to perform input validation can be blacklist or whitelist.
+  + Integer Overflow and integer sign attacks: an integer variable can only handle values up to a maximum size, such as 32767 for 16-bit data. if you input a larger number the computer interprets it as a negative one.
+    + Vulnerable programs can be tricked into accepting large amount of data, bypassing the data validation, and this can allow a buffer overflow.
+  + Dangling Pointer Attacks: exploiting pointers that point to invalid memory addresses, inserting there malicious code
+
+#### 2. route through a UNIX System (e.g. unix-based firewall)
+
+Unix systems providing security between two networks (Firewalls). Source routing is a technique whereby the sender of a packet can specify the route that a packet should take through the network.
+
+Attackers send source-routing packets through the firewall (if source routing is enabled) to internal systems to circunmvent UNIX firewalls
+
+#### 3. User-initiated remote execution (e.g. trojan, phishing)
+
+Trick a user into executing code, surfing into a website or launching malicious e-mail attachments
+
+#### 4. Promiscuous Mode attacks (e.g. tcpdump vulnerability)
+
+promiscuous mode refers to the special mode of Network Interface Cards that allows a NIC to receive all traffic on the network even if it's not addressed to its NIC.
+
+A carefully crafted packet to hack the sniffer or driver. The sniffing software itself has vulnerabilities and an attacker can inject code through the sniffer.
+
+### Techniques to gain Shell Access
+
+- Remote Command Execution:
+  - exploit interactive shell access to remotely login into a UNIX server (telnet, rlogin or SSH)
+  - exploit non-interactive services to execute commands (RSH, SSH or Rexec)
+- Reverse telnet and Back Channel
+  - back channel: the communication channel originates from the target system (as opposed to exploiting remote login services from the attacking system)
+  - reverse telnet uses telnet services to create a back channel from the target system to the attacker's system
+
+**Common types of Remote Attacks**
+- FTP: ftp servers sometimes allow anonymous users to upload files. Misconfiguration may allow directory traversal and access to sensitive files. It's ineherently insecure.
+- Sendfmail: it's a mail transfer agent that is used on many UNIX systems. It has a long history of many vulnerabilities. If misconfigured allows spammers to send junk mail trough the servers
+- Remote Procedure Call services: numerous stock versions of UNIX have many RPC services enabled by default. RPC services are complex and generally run with root priviledges \[ATTENTION !!\] Good target to exploit to obtain remote root shells.
+- NFS (network file system): allows transparent acecss to files and directories of remote systems as if they were stored locally. Many buffer overflow related to `mountd` have been discovered
+- DNS: one of the few services that is almost always required and running on an organization's Internet perimeter network. The most common implementation of DNS for UNIX is the Berkeley Internet Name Domain (BIND) PAckage
+  - BIND: contains numerous buffer overflows vulnerabilities, obtained by malformed responses to DNS queries. PRovides attackers some degree of remote control over the server, although not a true shell
+  - DNS Cache Poisoning: being able to change DNS records in order to take control over the network traffic 
+- X Insecurities: The X Window System allows many programs to sharea single graphical display. X Clients can captire the keystrokes of the console users. Capture windows for display elsewhere. 
+  - X snooping tools: attacker can monitor and also send keystrokes to any windows
+    - **xscan** to scan the entire subnet looking for an open X server and log all keystrokes; 
+    - **xwatchwin** even lets you see the windows users have open 
+- SSH: widely used as a secure alternative to telnet, but there are integer overflows and other problems in some SSH packages which can be exploited, granting remote root access
+- OpenSSL Overflow Attacks: open source implementation of SSL and present in numerous versions of UNIX. It had a famous buffer overflow vulnerability exploited by the Slapper Worm; furthermore, it suffers of improper input validation
+- Apache Attacks: prevalent web server, higly complex and configurable. It has vulnerabilities like any program.
+
+
+<br>
+<br>
+
+--- 
+
+<br>
 <br>
 
 # Hacking UNIX - Local Access
@@ -366,166 +544,6 @@ The worst type of rootkits, used to compromise the kernel of the system itself.
 Allows attackers to compromise all system programs, without modifying any of them. These rootkits can intercept system calls and change them into the ones they want, even by just modifying the system call table.
 
 They can also corrupt system call handlers, to point to attacker's system call table.
-
-
-<br>
-<br>
-
---- 
-
-<br>
-<br>
-
-# Hacking Unix - Remote Access
-## 1. Unix systems and hacking tools
-Unix is used by the mayority of servers around the globe. There are many types of Linux distributions and the source code is available. Furthermore, it is easy to modify and to develop a program for it.
-
-Being a widespread system, has as a consequence the higly attractiveness of the system for attackers.
-
-Linux has 2 types of access: user and **ROOT** access
-
-The attacker performs the following steps to identify linux distro, open ports, RPC servers and the version of running applications:
-1. Footprinting - Gather informations and profiling the target
-  + whois, nslookup, dig, FOCA, MALTEGO, ...\
-2. Scanning - identify entry points for the intrusion
-  + nmap, netcat, tcpdump, nsdlookup, Nessus
-3. Enumeration - probe the identified services to fully know weaknesses. This involves active connections to systems and directed queries.
-  + dnsenum, rpcinfo, smbclient
-4. Vulnerability Mapping - Map attributes (listening services, version of running servers) to potential security holes:
-  - Vulnerability info databases  online
-  - Use Public exploit codes or write your own
-  - Use atomated vulnerability scanning tools
-
-### Metasploit Framework
-The metasploit framework provides the infrastructure, content and tools to perform penetration tests and extensive security audits. It comprises reconnaissance, exploit development, payload packaging and delivery of exploits to vulnerable targets.
-
-![architettura metasploit](images/metasploit-architecture.png)
-
-**Module**: A standalone piece of code or software that extends the funcionality of the Metaploit Framework. A module can be an exploit, escalation, scanner or information gathering unit of code that interfaces with the framework to perform some operations.
-
-**Session**: a session is a connection between a target and the machine running Metasploit. Sessions allow for commands to be sent to and executed by the target machine.
-
-#### Metasploit Modules 
-
-**Exploits**: Exploits are the code and commands that Metasploit uses to gain access.
-
-**Payloads**: Payloads are what are sent with the exploit to provide the attack a mechanism to interact with the exploited system.
-
-**Auxiliary**: The Auxiliary modules provide many useful tools including wireless attacks, denial of service, reconnaissance
-scanners, and SIP VoIP attacks.
-
-**NOPS**: No Operation. NOPs keep the payload size consistent
-
-**Post-Exploitation**: can be run on compromised targets to gather evidence, pivot deeper into a target network, ecc...
-
-**Encoders**: are used to successfully remove unwanted bytes
-
-#### Metasploit INterfaces
-
-Metasploit has multiple interfaces including:
-- msfconsole - an interactive command-line like interface
-- msfcli - a literal Linux command line interface
-- Armitage - a GUI-based third partyt application
-- msfweb - browser based interface
-
-#### Metasploit Console
-has a simple interface. Allows users to search for modules, configure those modules and execute them against specified targets with chosen payloads.
-
-Provides management interface for opened sessions, network redirection and data collection.
-
-#### Starting metasploit
-1. start the PostgreSQL database for Metasploit: `service postgresql start`
-2. launch metasploit framework console: `mfsconsole` 
-
-Core commands:
-   + msf > show exploits
-   + msf > show payloads
-   + msf > search Variable
-   + msf > show options
-   + msf > set Variable
-   + msf > info
-   + msf > exploit
-
-Sample operation:
-  + Open Metasploit Console
-  + Select Exploit
-  + Set Target
-  + Select Payload
-  + Set Options
-  + exploit
-
-## 2. Exploit and gain remote access to unix
-
-In Unix attacks, attackers follow a logical progression:
-1. gain remote access via the network - Tipically exploiting a vulnerability in a listening service
-2. Have a Command shell or login to the system - Local attacks are also called Priviledge Escalation Attacks
-
-### Primary methods to gain remote access
-#### 1. exploit a listening service
-if a service is not listening, it cannot be broken remotely. Services that allow interactive logins can be exploited: telnet, ftp, rlogin, ssh, others...
-
-BIND is the most popular DNS server, and it has many vulnerabilities
-
-**How To Exploit**:
-- Brute force attacks:
-  + Service that can be bruteforced: telnet, rlogin/rsh, ssh, SNMP, LDAP, POP/IMAP, HTTP/HTTPS, CVS, SVN, Postgres, MySQL, Oracle
-  + using list of user accounts obtained during enumeration phase: Finger, rusers, sendmail, ...
-  + obtaining access to accounts with weak or no passwords
-  + some automated tools: hydra or medusa
-- Data Driven attacks: sending data to an active service causing unintended or undesirable results
-  + buffer overflow: a user or process attempts to place more data into a buffer than was previously allocated (associated with specific C functions)
-    + normally cause a segmentation violation, but attackers can exploit it in the target system to execute a malicious code of their choosing
-    + different ways to attack: jump to a function, jump to the buffer and execute the inserted code, return to libc
-    + Returned Oriented Programming (ROP): generalization of return-to-libc attacks. Instead of returning to system functions return to existing code that is already in the program's addressable space. Create arbitrary code by chaining short code sequences (to make a shellcode for example)
-    + Some countermeasures: Stack smashing and execution Protection, ASLR, 
-  + Format String attacks: exploit vulnerabilities in the printf from a buffer, when it uses format strings such as %d, %s, ... There are some strings that can help printing addresses or to print in stack (%n)
-  + Input validation attacks: possible when the server does not properly parse input before passing it to further processing.
-    + Telnet daemon passes syntactically incorrect input to the login program -> an attacker could bypass authentication without being prompted for a password.
-    + These attacks work when user-supplied data is not tested and cleaned before execution.
-      + Two approaches to perform input validation can be blacklist or whitelist.
-  + Integer Overflow and integer sign attacks: an integer variable can only handle values up to a maximum size, such as 32767 for 16-bit data. if you input a larger number the computer interprets it as a negative one.
-    + Vulnerable programs can be tricked into accepting large amount of data, bypassing the data validation, and this can allow a buffer overflow.
-
-#### 2. route through a UNIX System (e.g. unix-based firewall)
-
-Unix systems providing security between two networks (Firewalls). Source routing is a technique whereby the sender of a packet can specify the route that a packet should take through the network.
-
-Attackers send source-routing packets through the firewall (if source routing is enabled) to internal systems to circunmvent UNIX firewalls
-
-#### 3. User-initiated remote execution (e.g. trojan, phishing)
-
-Trick a user into executing code, surfing into a website or launching malicious e-mail attachments
-
-#### 4. Promiscuous Mode attacks (e.g. tcpdump vulnerability)
-
-promiscuous mode refers to the special mode of Network Interface Cards that allows a NIC to receive all traffic on the network even if it's not addressed to its NIC.
-
-A carefully crafted packet to hack the sniffer or driver. The sniffing software itself has vulnerabilities and an attacker can inject code through the sniffer.
-
-### Techniques to gain Shell Access
-
-- Remote Command Execution:
-  - exploit interactive shell access to remotely login into a UNIX server (telnet, rlogin or SSH)
-  - exploit non-interactive services to execute commands (RSH, SSH or Rexec)
-- Reverse telnet and Back Channel
-  - back channel: the communication channel originates from the target system (as opposed to exploiting remote login services from the attacking system)
-  - reverse telnet uses telnet services to create a back channel from the target system to the attacker's system
-
-**Common types of Remote Attacks**
-- FTP: ftp servers sometimes allow anonymous users to upload files. Misconfiguration may allow directory traversal and access to sensitive files. It's ineherently insecure.
-- Sendfmail: it's a mail transfer agent that is used on many UNIX systems. It has a long history of many vulnerabilities. If misconfigured allows spammers to send junk mail trough the servers
-- Remote Procedure Call services: numerous stock versions of UNIX have many RPC services enabled by default. RPC services are complex and generally run with root priviledges \[ATTENTION !!\] Good target to exploit to obtain remote root shells.
-- NFS (network file system): allows transparent acecss to files and directories of remote systems as if they were stored locally. Many buffer overflow related to `mountd` have been discovered
-- DNS: one of the few services that is almost always required and running on an organization's Internet perimeter network. The most common implementation of DNS for UNIX is the Berkeley Internet Name Domain (BIND) PAckage
-  - BIND: contains numerous buffer overflows vulnerabilities, obtained by malformed responses to DNS queries. PRovides attackers some degree of remote control over the server, although not a true shell
-  - DNS Cache Poisoning: being able to change DNS records in order to take control over the network traffic 
-- X Insecurities: The X Window System allows many programs to sharea single graphical display. X Clients can captire the keystrokes of the console users. Capture windows for display elsewhere. 
-  - X snooping tools: attacker can monitor and also send keystrokes to any windows
-    - **xscan** to scan the entire subnet looking for an open X server and log all keystrokes; 
-    - **xwatchwin** even lets you see the windows users have open 
-- SSH: widely used as a secure alternative to telnet, but there are integer overflows and other problems in some SSH packages which can be exploited, granting remote root access
-- OpenSSL Overflow Attacks: open source implementation of SSL and present in numerous versions of UNIX. It had a famous buffer overflow vulnerability exploited by the Slapper Worm; furthermore, it suffers of improper input validation
-- Apache Attacks: prevalent web server, higly complex and configurable. It has vulnerabilities like any program.
 
 
 <br>

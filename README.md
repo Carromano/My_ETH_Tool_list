@@ -540,7 +540,8 @@ tag utili:
 > -p port: specifica una porta locale   
 > -u: UDP mode  
 > -i secs: interval of seconds to wait  
-> -v: verbose mode  
+> -v: verbose mode
+> -vv: very verbose mode
 > -n: numeric only ip addresses (No DNS)  
 
 tcp bind shell:

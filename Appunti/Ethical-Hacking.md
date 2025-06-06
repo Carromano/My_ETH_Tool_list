@@ -401,7 +401,7 @@ users are lazy, and password requirements help only marginally (P@ssword1 follow
 
 ### /etc/passwd:
 
-oracle:x:1021:1020:Oracle user:/data/network/oracle:/bin/bash
+oracle:_x_:1021:1020:Oracle user:/data/network/oracle:/bin/bash
   1    2  3     4       5             6                 7
 
 1. Username
@@ -817,7 +817,7 @@ Some other things that have to be checked for any changes are:
 
 # Remote Connectivity and VoIP Hacking
 ## Dial-Up Hacking
-Many companies still use dial-uè connections: Connecting to old severs, ntwork devices, industrial Contorl Systems (ICS).
+Many companies still use dial-up connections: Connecting to old severs, network devices, industrial Control Systems (ICS).
 
 Dial-Up hacking process is similar to other hacking (footprinting, scan, enumeration, exploit) and is automated by tools: wardialer or demo dialer.
 
@@ -1240,7 +1240,7 @@ EAP-TTLS and PEAP both use a TLS tunnel to protect a less secure inner authentic
   - Don’t use it! 
 - WPA-PSK 
   - Could be brute-forced, though high complexity 
-  - One PSK fits all  put other users at risk 
+  - One PSK fits all: put other users at risk 
 - WPA Enterprise 
   - LEAP 
     - Could be brute-forced, needs extremely complex passwords 
@@ -1263,8 +1263,8 @@ EAP-TTLS and PEAP both use a TLS tunnel to protect a less secure inner authentic
 ## Physical Access
 
 ### BUMP KEY
-![key](images/key.png)
-![bump_key](images/bump_key.png)
+![key](images/key.png)   
+![bump_key](images/bump_key.png)  
 Every pin falls to its lowest point. The key is hit with a screwdriver to create mechanical shocks. They key pins move up and briefly pass through the shear line. The lock can be opened at the instant the ksy pins align on the shear line. This method can used to open doors, pc cases, racks, laptop cable locks, ...
 
 **Results of the Bump Key**: an experienced bumper can open a lock as quickly as a person with the correct key. bumping does not damage the lock, unless it is done many times or clumsily, and it does not leave any evidence behind.
@@ -1459,7 +1459,7 @@ We should look for:
 ![url](images/url_structure.png)
 
 URLs can only be sent over the Internet using the  ASCII character-set. Here's a list of “non-allowed” characters (per RFC 1630)
-> : / ? \# \[ \] @ \! $ & ’ \( \) \* \+ , ; =
+> : \/ \? \# \\[ \] @ \! $ & ’ \( \) \* \+ , ; =
 >
 
 Not-allowed (unsafe) ASCII characters are ENCODED with a " % "  followed by two hexadecimal digits
@@ -1695,7 +1695,7 @@ The injected code is not visible in a URL and so it's really more dangerous than
 - Manipulation of the DOM to inject malicious code through various techniques such as JS event handlers.
 - Code Execution is triggered by specific user interctions, such as clicking a link, modifying form data or running JS code within the page
 
-![Dom-Based](images/DOM-Based XSS.png)
+![Dom-Based](images/DOM-Based-XSS.png)
 
 ### XSS IMPACT
 
@@ -1704,7 +1704,7 @@ the attacker can be able to:
   - perform SESSION HIJACKING: impersonate a legitimate user and gain unauthorized access to accounts or systems
   - Website defacement: malicious code can be injected to alter the website's appearence
 
-XSS cann be a stepping stone for more sophisticated attacks, like malware distribution or phishing
+XSS can be a stepping stone for more sophisticated attacks, like malware distribution or phishing
 
 ### XSS mitigation
 1. input Validation on the server-side in order to sanitize user input before storing/running it
@@ -1938,8 +1938,8 @@ To exploit this we can use:
 #### File Operations
 ---
 we can use commands to manage files if the permissions are not correctly set:
-- SELECT `loadfile('/etc/passwd')`
-- SELECT `'frase_da_scrivere' into outfile '/tmp/file'`
+  - SELECT `loadfile('/etc/passwd')`
+  - SELECT `'frase_da_scrivere' into outfile '/tmp/file'`
 
 ---
 
@@ -1955,7 +1955,7 @@ we can use commands to manage files if the permissions are not correctly set:
 - Best practice: use mysql_real_escape_string() and use of Prepared statements
 - If a number is expected, check that the input really is a number 
 - Parametrized query (if the language supports it)
-  - `cursor.execute("INSERT INTO table VALUES ( %s, %s, %s)", var1 , var2 , var3 )`
+    - `cursor.execute("INSERT INTO table VALUES ( %s, %s, %s)", var1 , var2 , var3 )`
 
 <br>
 
@@ -1987,8 +1987,7 @@ Can be installed with docker:
 > http://localhost:3000/#/register
 
 ## OWASP TOP 10 WEB APPLICATION SECURITY - 2021
-1. A01:2021-Broken Access Control: Users access beyond their permissions, leading to data breaches, misuse, and functionality 
-abuse
+1. A01:2021-Broken Access Control: Users access beyond their permissions, leading to data breaches, misuse, and functionality abuse
    - Over-permissioned access: Too much access granted, not based on specific needs
    - Bypassing checks: Manipulating URLs, application state, or API requests
    - Insecure identifiers: Accessing others' accounts using unique IDs (IDOR)
@@ -1996,8 +1995,7 @@ abuse
    - Privilege escalation: Unintentional or malicious elevation of user rights
    - Metadata manipulation: Tampering with tokens, cookies, or CORS configurations
    - Forced access: Sneaking into unauthorized or privileged areas
-2. A02:2021-Cryptographic Failures: Notable CWEs associated with Crypto Failures are CWE-259: Use of Hard-coded Password, 
-CWE-327: Broken or Risky Crypto Algorithm, and CWE-331 Insufficient Entropy
+2. A02:2021-Cryptographic Failures: Notable CWEs associated with Crypto Failures are CWE-259: Use of Hard-coded Password, CWE-327: Broken or Risky Crypto Algorithm, and CWE-331 Insufficient Entropy
    - Plaintext Transmission: use of unencrypted protocols like HTTP
    - Weak Crypto: outdated algorithms and protocols + downgrade
    - Randomness Issues: Non-cryptographically secure randomness, weak seeding
@@ -2060,13 +2058,13 @@ Essential, for instance, in the reconnaissance stage and lateral movement.
    - Useful tools: gobuster
 
 ## Path Traversal
-Crafting malicious input to access unauthorized files and directories. Esploiting vulnerabilities in how applications handle user-supplied input. 
+Crafting malicious input to access unauthorized files and directories. Exploiting vulnerabilities in how applications handle user-supplied input. 
 
 Part of A01:2021-Broken Access Control
 
 ### Path Traversal encodings
 
-|[encodings](PATH_TRAVERSAL_encodings.png)
+![encodings](images/PATH_TRAVERSAL_encodings.png)
 
 ## File Upload
 
@@ -2093,13 +2091,12 @@ Trick the web application to load some content from a REMOTE source. Very simila
 ## A03:2021-Injection
 In short, an injection is a manipulation that can be used to make the application perform unintended actions.
 
-It happens when the application directly incorporates user-supplied data into dynamic queries or commands (like SQL statements, scripts or system commands); or when the application doesn't perform proper escaping or context-aware handling.
-
-some types of injection are: 
+It happens when the application directly incorporates user-supplied data into dynamic queries or commands (like SQL statements, scripts or system commands); or when the application doesn't perform proper escaping or context-aware handling. Some types of injection are: 
   - [XSS](#xss)
   - [SQLi](#sql-injections)
   - server side template injection
   - OS Command Injection
+
 
 ### Server-Side Template Injection (SSTI)
 
@@ -2129,13 +2126,9 @@ The most "direct" form of RCE. A system is vulnerable to OS command injection wh
 
 # Mobile Hacking - Android
 
-People argue about whether Android is truly open-source, but some products and versions are kept secret by google.
+People argue about whether Android is truly open-source, but some products and versions are kept secret by google. Basically uses linux kernel, developers can use C and C++. Many users are using out-of-date OS varsions.
 
-Basically uses linux kernel, developers can use C and C++.
-
-Many users are using out-of-date OS varsions.
-
-![Android_versions](images/Android_versions.png)
+![Android_versions](images/Android_versions.png)  
 
 Malwares had an explosive growth in the last decades. We need to start using antiviruses on android. 
 
@@ -2144,10 +2137,10 @@ Malwares had an explosive growth in the last decades. We need to start using ant
 ![architecture](images/Android_Architecture.png)
 
 Each application runs in its own instance of Dalvik VM 
-- Makes applications work on many devices 
-- Very limited power, memory, storage 
-- Apps are written in Java, transformed to dex (Dalvik Executable) 
-- Dalvik is open source
+  - Makes applications work on many devices 
+  - Very limited power, memory, storage 
+  - Apps are written in Java, transformed to dex (Dalvik Executable) 
+  - Dalvik is open source
 
 ### Sandbox
 
@@ -2185,7 +2178,7 @@ It has some risks:
 #### Android Rooting Tools
 - ROOTx: Root for almost all ANDROID devices 
 - SuperOneClick: native windows application, runs on linux and Mac with Mono. it's the most universal tool.
-  - Run SuperOneClick on a Computer; Connect the phone with a USB cable; turn on "USB Debugging". 
+    - Run SuperOneClick on a Computer; Connect the phone with a USB cable; turn on "USB Debugging". 
 - Z4Root: Android APP
 - GingerBreakl: Doesn't work on all devices
 #### Rooting a Kindle Fire
@@ -2234,7 +2227,7 @@ Android Trojan App Process:
   - Take a legitimate application, disassemble the dex code, decode the Manifest.
   - Include the malicious code, assemble the dex, encode the manifest
   - Sign the final APK file
-  - One tool can be: [apktool](code.google.com/p/android/apktool) - Disassembles dex code into smali (Raw Dalvik VM bytecode). Can be used to embed malicious code into apps
+  - One tool can be [apktool](code.google.com/p/android/apktool): Disassembles dex code into smali (Raw Dalvik VM bytecode). Can be used to embed malicious code into apps
   - Another tool is **SignApk**, to verify the repacked file
 
 
@@ -2245,8 +2238,8 @@ Android Trojan App Process:
 WebKit is an open-source Web browser engine. 
 
 - Vulnerability: handled floating point data types incorrectly (patched in Android 2.2) 
-  - Drive-by download from a malicious Web server hosting a malicious HTML file. 
-  - Access to HTML file returns a remote shell (but not root) 
+    - Drive-by download from a malicious Web server hosting a malicious HTML file. 
+    - Access to HTML file returns a remote shell (but not root) 
 
 - Countermeasures: updates & antivirus 
 
@@ -2318,25 +2311,25 @@ Pre-installed on devices: monitors activiry and sends it back to the carrier. No
 - Originally iPhone allowed no third-party apps at all 
 - Since 2008, the App Store appeared 
 - Early iOS versions were very insecure 
-  - All apps ran as root 
-  - No sandbox 
-  - No code signing 
-  - No ASLR 
-  - No Position Independent Executable (PIE) support
+    - All apps ran as root 
+    - No sandbox 
+    - No code signing 
+    - No ASLR 
+    - No Position Independent Executable (PIE) support
 - Security Measures Added in Later Versions 
-  - Third-party apps run as less privileged account "mobile", not root 
-  - Sandboxing limits apps to a limited set of system resources 
-  - Apps have to be signed by Apple to execute 
-  - Code signature verification is at load time and runtime 
-  - ASLR for system components and libraries 
-  - PIE causes apps to load at different base address upon every execution
+    - Third-party apps run as less privileged account "mobile", not root 
+    - Sandboxing limits apps to a limited set of system resources 
+    - Apps have to be signed by Apple to execute 
+    - Code signature verification is at load time and runtime 
+    - ASLR for system components and libraries 
+    - PIE causes apps to load at different base address upon every execution
 
 ### iPhone 3GS
 The iPhone 3GS was the giant leap forward in encryption:
   - AES encryption on by default 
   - Encryption is very fast 
   - Key is stored in flash memory, but locked with user's PIN 
-    - Data wipe after 10 guesses is an optional feature
+      - Data wipe after 10 guesses is an optional feature
 
 ## Hacking your iPhone: Jailbreaking
 Jailbreaking is Taking full control of an iOS device. It allows:
@@ -2361,9 +2354,9 @@ Cydia is The App Store for jailbroken devices
 4. Launch jailbreak app
 5. Select IPSW and wait for customizing
 6. Switch iPhone into Device Firmware Update (DFU) mode:
-   1. Power iPhone off 
-   2. Hold Power+Home buttons for 10 sec. 
-   3. Release Power but hold Home down for 5-10 more seconds
+    1. Power iPhone off 
+    2. Hold Power+Home buttons for 10 sec. 
+    3. Release Power but hold Home down for 5-10 more seconds
 7. Jailbreak software completes the process
 
 ### Remote Jailbreaking - Jailbreakme.com
@@ -2378,11 +2371,11 @@ Cydia is The App Store for jailbroken devices
 ### Attack Options
 - Local network-based attacks: wireless MITM requires physical proximity 
 - Attacker with physical access to device 
-  - Boot-based jailbreak 
+    - Boot-based jailbreak 
 - Client-side attacks 
-  - App vulnerabilities, mainly MobileSafari 
-  - Far more practical 
-  - But exploiting an app only grants access to data in the app's sandbox
+    - App vulnerabilities, mainly MobileSafari 
+    - Far more practical 
+    - But exploiting an app only grants access to data in the app's sandbox
 - Breaking out of the sandbox (requires a kernel-level vulnerability)  
 - Exploits used in Jailbreakme can be repurposed for attack tools 
 
@@ -2399,21 +2392,21 @@ Cydia is The App Store for jailbroken devices
 - Later versions made an iPhone botnet
 
 Countermeasures: 
-- Don't jailbreak! 
-- Change the password 
-- Enable SSH only when needed (SBSettings makes this easy)
-- Upgrade iOS to the latest jailbreakable version 
-- Install patches made available by the  community
+  - Don't jailbreak! 
+  - Change the password 
+  - Enable SSH only when needed (SBSettings makes this easy)
+  - Upgrade iOS to the latest jailbreakable version 
+  - Install patches made available by the  community
 
 
 ### iPhone Remote Attacks
 
 - If you don't jailbreak your iPhone, it's very safe 
 - Only one port is open 
-  - TCP 62087 
-  - No known attacks 
-  - Tiny attack surface 
-  - No SSH, SMB, HTTP... 
+    - TCP 62087 
+    - No known attacks 
+    - Tiny attack surface 
+    - No SSH, SMB, HTTP... 
 - Almost impossible to gain unauthorized access from the network 
 
 ### Remote Vulnerabilities
@@ -2426,20 +2419,20 @@ Countermeasures:
 - PDF used JailBreakMe3.0 attack to silently root the device 
 - SSH and VNC installed 
 - Countermeasures:
-  - Possible to take full control of iPhone 
-  - Update iOS bundle
-  - Configure your iPhone to "Ask to Join Networks" 
-  - Don't store sensitive data on your phone
+    - Possible to take full control of iPhone 
+    - Update iOS bundle
+    - Configure your iPhone to "Ask to Join Networks" 
+    - Don't store sensitive data on your phone
 
 ### Physical Access
 - Boot-based jailbreak 
 - Install SSH server 
 - Access to data, including passwords in keychain 
-  - Takes 6 min. to do 
+    - Takes 6 min. to do 
 - Countermeasures:
-  - Encrypt data using Apple features and third-party tools from McAfee, Good, etc. 
-  - Use a passcode of 6 digits or more 
-  - Install remote-tracking software to recover a stolen or lost device, or remotely wipe it 
+    - Encrypt data using Apple features and third-party tools from McAfee, Good, etc. 
+    - Use a passcode of 6 digits or more 
+    - Install remote-tracking software to recover a stolen or lost device, or remotely wipe it 
 
 <br>
 <br>
@@ -2469,19 +2462,19 @@ Some other registers and their conventional use
   - rcx - typically the index in loops
 
 ### Call Stack
-A stack-like data structure:
-  - Stores inmformation about the active subroutines of a computer program
-  - 
+A stack-like data structure stores information about the active subroutines of a computer program
+
 ![call stack](images/call-stack.png)
 
 
 ### Function Prologue and Epilogue
 **Function prologue** - a few lines of code at the beginning of a function
-  - Prepares the stack and registers for use within the function
+   - Prepares the stack and registers for use within the function
 
 **Function epilogue** - appears at the end of the function
-  - Restores the stack and registers to the state they were in before the function was called
-- ![prologue - epilogue](images/pro-epi.png)
+   - Restores the stack and registers to the state they were in before the function was called
+   
+![prologue - epilogue](images/pro-epi.png)
 
 ## Security Measures
 
@@ -2494,12 +2487,12 @@ A stack canary is a random value
 
 Canary logic is produced by the compiler. on Linux, canary is always NULL terminated
 
-Stack with canary:
-![canary](images/canary.png)
+Stack with canary:  
+![canary](images/canary.png)  
 
-![canary2](images/canary2.png)
+![canary2](images/canary2.png)  
 
-![canary3](images/canary3.png)
+![canary3](images/canary3.png)   
 
 
 ### Address Space Layout Randomization - ASLR
@@ -2513,14 +2506,14 @@ ASLR randomly arranges the address space positions of key data areas of a proces
 
 It is implemented by the operating system: Can be expensive and could be turned off on some device.
 
-Codes meaning
-0. No randomisation
-1. Shared libraries, stack, mmap(), VDSO and heap are randomised
-2. Full randomisation: 1. + memory managed through brk() (e.g., program heap)
+Codes meaning  
+- 0: No randomisation  
+- 1: Shared libraries, stack, mmap(), VDSO and heap are randomised  
+- 2: Full randomisation: 1. + memory managed through brk() (e.g., program heap)  
 
-Examples: 
-![aslr-check](images/aslr_check.png)
-![aslr-check2](images/aslr_check2.png)
+Examples:  
+![aslr-check](images/aslr_check.png)  
+![aslr-check2](images/aslr_check2.png)  
 
 ### Position Independent Code (PIC) / Position Independent Executable (PIE)
 
@@ -2537,7 +2530,7 @@ PIC is also used for executable binaries (PIE)
 
 ## Shared Libraries - GOT and PLT
 
-Shared libraries  - Body of PIC, shared by multiple binaries (Libc is an example)
+Shared libraries - Body of PIC, shared by multiple binaries (Libc is an example)
 
 Executables don’t know the location of functions they need in shared libs
 
@@ -2591,7 +2584,7 @@ Something useful to know for binary exploitation on amd64 SysV ABI (Linux):
   - Some instructions (like MOVAPS) will cause SIGSEGV if the stack is not aligned
 
 ## Shellcodes
-Small piece of code used as the payload in the exploitation of a software vulnerability. Written in machine code for the target system (hardware and OS). It typically spawns a shell - but, being arbitrary code, it can for instance:
+Small piece of code used as the payload in the exploitation of a software vulnerability. Written in machine code for the target system (hardware and OS). It typically spawns a shell but, being arbitrary code, it can for instance:
   - Create a bind shell with TCP
   - Create a reverse shell via TCP or UDP
   - Open the Windows Calculator app
@@ -2752,7 +2745,8 @@ For this specific ROP to work, that means we need to move rsp by 8 bytes
 
 ![visual plan](images/plan.png)
 
-Code with PWNTOOLS:
+
+### Code with PWNTOOLS:
 ```python
 #!/usr/bin/env python3
 from pwn import asm, context, ELF, log, p64, process, sys
